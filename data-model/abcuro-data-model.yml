@@ -1,0 +1,247 @@
+generated: '2026-08-02'
+method: derived
+source: openapi/abcuro-content-openapi.yml (schemas derived from live responses) + live probes
+note: >-
+  The entity graph of the Abcuro corporate content API. Entities and relationships were derived
+  from field sets observed in live responses and from the _links relations each record carries.
+  Nothing here is inferred from the WordPress handbook alone — every relationship listed was seen
+  in a real response from abcuro.com on 2026-08-02.
+
+identifier_scheme:
+  style: opaque integer, site-scoped
+  note: >-
+    Every content record and every taxonomy term is keyed by an unprefixed integer id drawn from the
+    same WordPress wp_posts / wp_terms sequences, so a Person id and a MediaItem id share one
+    namespace and can collide in a client that keys by id alone. Key by (type, id) or by the stable
+    per-collection `slug`. `slug` is the durable human key: e.g. abcuro_people/park-michele,
+    abcuro_investors/abrdn.
+
+entities:
+- name: Post
+  collection: /wp/v2/posts
+  operations: [listPosts, getPost]
+  count_observed: 28
+  role: Press releases — the site's News feed. Clinical and corporate announcements.
+  key_fields: [id, slug, date, title.rendered, content.rendered, excerpt.rendered, link]
+  domain: press-release
+
+- name: Page
+  collection: /wp/v2/pages
+  operations: [listPages, getPage]
+  count_observed: 17
+  role: >-
+    Static narrative pages — about, leadership, team, board of directors, investors, science,
+    publications, pipeline, clinical trials, careers, contact, privacy, terms.
+  key_fields: [id, slug, parent, menu_order, title.rendered, content.rendered, link]
+  domain: site-content
+  hierarchical: true
+
+- name: MediaItem
+  collection: /wp/v2/media
+  operations: [listMediaItems, getMediaItem]
+  count_observed: 141
+  role: >-
+    Media library — images, investor logos, the ulviprubart infographic, and PDF documents
+    including presented MUSCLE trial data.
+  key_fields: [id, slug, media_type, mime_type, source_url, alt_text, media_details, post]
+  domain: asset
+
+- name: Person
+  collection: /wp/v2/abcuro_people
+  operations: [listPeople, getPerson]
+  count_observed: 26
+  role: Leadership, team and board-of-directors records.
+  key_fields: [id, slug, title.rendered, content.rendered, person_role, featured_media]
+  domain: people
+  custom_post_type: abcuro_people
+
+- name: Investor
+  collection: /wp/v2/abcuro_investors
+  operations: [listInvestors, getInvestor]
+  count_observed: 15
+  role: Investor records powering the Investors page (e.g. abrdn, NEA, Samsara BioCapital).
+  key_fields: [id, slug, title.rendered]
+  domain: investors
+  custom_post_type: abcuro_investors
+  note: >-
+    Carries no content or featured_media field in the view context; the logo is rendered by the
+    theme rather than linked from the record, so investor→logo cannot be resolved through the API.
+
+- name: Publication
+  collection: /wp/v2/abcuro_pubs
+  operations: [listPublications, getPublication]
+  count_observed: 13
+  role: Peer-reviewed scientific publications, e.g. anti-cN1A antibody status and therapeutic
+    response to ulviprubart in inclusion body myositis.
+  key_fields: [id, slug, date, title.rendered, content.rendered]
+  domain: science
+  custom_post_type: abcuro_pubs
+  note: >-
+    Citation metadata (journal, DOI, PubMed id, authors) is not exposed as structured fields — it is
+    embedded in content.rendered HTML. There is no machine-readable bibliographic record.
+
+- name: Job
+  collection: /wp/v2/abcuro_jobs
+  operations: [listJobs, getJob]
+  count_observed: 0
+  role: Job postings. The custom post type is registered and answers 200, but the collection is
+    empty.
+  domain: careers
+  custom_post_type: abcuro_jobs
+
+- name: Category
+  collection: /wp/v2/categories
+  operations: [listCategories, getCategory]
+  count_observed: 1
+  role: 'Taxonomy on Post. The single term is slug "uncategorized" renamed to "Press Release",
+    count 28.'
+  taxonomy: category
+  domain: taxonomy
+
+- name: Tag
+  collection: /wp/v2/tags
+  operations: [listTags, getTag]
+  count_observed: 0
+  taxonomy: post_tag
+  domain: taxonomy
+
+- name: PersonRole
+  collection: /wp/v2/person_role
+  operations: [listPersonRoles, getPersonRole]
+  count_observed: 3
+  role: The taxonomy that partitions Person records into the three About pages.
+  taxonomy: person_role
+  domain: taxonomy
+  terms_observed:
+  - {id: 3, slug: team, name: Team, count: 17}
+  - {id: 4, slug: leadership, name: Leadership, count: 3}
+  - {id: 5, slug: board, name: Board, count: 10}
+  note: The counts sum to 30 against 26 Person records, so a person can hold more than one role
+    (leadership members also appear on the board).
+
+- name: User
+  collection: /wp/v2/users
+  operations: [listUsers, getUser]
+  count_observed: 4
+  role: WordPress author accounts. Authorship metadata only — not company people.
+  domain: system
+  note: >-
+    Distinct from Person. Answers anonymously and enumerates author slugs; see the
+    security_posture_findings in conformance/abcuro-conformance.yml.
+
+- name: Comment
+  collection: /wp/v2/comments
+  operations: [listComments, getComment]
+  count_observed: 0
+  domain: system
+
+- name: SearchResult
+  collection: /wp/v2/search
+  operations: [search]
+  role: >-
+    A thin cross-type projection — {id, title, url, type, subtype} plus _links.self pointing at the
+    full record. The only operation that spans all content types in one call.
+  domain: search
+
+relationships:
+- from: Post
+  to: Category
+  cardinality: has_many
+  via: categories
+  evidence: 'Post.categories is an array of category term ids; observed live.'
+- from: Post
+  to: Tag
+  cardinality: has_many
+  via: tags
+  evidence: Post.tags is an array of post_tag term ids.
+- from: Post
+  to: User
+  cardinality: belongs_to
+  via: author
+  evidence: Post.author is a user id; _links.author points at /wp/v2/users/{id}.
+- from: Post
+  to: MediaItem
+  cardinality: has_one
+  via: featured_media
+  evidence: Post.featured_media is a media id (0 when unset); _links["wp:featuredmedia"] resolves it.
+- from: Page
+  to: Page
+  cardinality: belongs_to
+  via: parent
+  evidence: >-
+    Page.parent is a page id, producing the observed hierarchy — /about/leadership/,
+    /about/team/, /about/board-of-directors/, /about/investors/ under /about/, and
+    /science/publications/, /science/other-publications/ under /science/.
+- from: Page
+  to: User
+  cardinality: belongs_to
+  via: author
+- from: Page
+  to: MediaItem
+  cardinality: has_one
+  via: featured_media
+- from: Person
+  to: PersonRole
+  cardinality: has_many
+  via: person_role
+  evidence: 'Person.person_role is an array of person_role term ids; observed value [5] (Board).'
+- from: Person
+  to: MediaItem
+  cardinality: has_one
+  via: featured_media
+  evidence: >-
+    Person.featured_media is a media id. Observed 0 on the sampled record, so headshots are not
+    consistently linked through the API even where they render on the site.
+- from: MediaItem
+  to: Post
+  cardinality: belongs_to
+  via: post
+  evidence: MediaItem.post is the id of the record the attachment was uploaded to (0 when unattached).
+- from: MediaItem
+  to: User
+  cardinality: belongs_to
+  via: author
+- from: Publication
+  to: MediaItem
+  cardinality: has_one
+  via: featured_media
+- from: Category
+  to: Category
+  cardinality: belongs_to
+  via: parent
+- from: PersonRole
+  to: PersonRole
+  cardinality: belongs_to
+  via: parent
+- from: SearchResult
+  to: any
+  cardinality: belongs_to
+  via: _links.self
+  evidence: >-
+    SearchResult.subtype names the target collection (post, page, abcuro_people, abcuro_investors,
+    abcuro_jobs, abcuro_pubs, category, post_tag, person_role) and _links.self carries the full
+    record URL.
+
+traversal_notes:
+  embedding: >-
+    Adding _embed to any request inlines author, wp:featuredmedia and wp:term under _embedded,
+    collapsing the relationships above into a single round trip.
+  sparse: >-
+    Use _fields to avoid the yoast_head and yoast_head_json blobs, which dominate every record's
+    payload and carry no data not already present in structured fields.
+  acf:
+    observed: empty array on every custom post type sampled
+    note: >-
+      Person, Investor and Publication all expose an `acf` field (Advanced Custom Fields), but it
+      returned [] on every record sampled — either no field groups are exposed to REST or none are
+      populated. Structured attributes such as an executive's title, an investor's URL, or a
+      publication's DOI are therefore NOT retrievable as fields; they exist only inside
+      content.rendered HTML or in the theme template.
+
+gaps:
+- Publications carry no structured DOI, journal, PubMed id or author list.
+- Investors carry no URL, logo reference, round, or investment date.
+- People carry no structured job title, bio field, or LinkedIn reference.
+- The clinical pipeline (ulviprubart, IBM, T-LGLL, T/NK cell lymphomas) is not modelled as data at
+  all — it is prose inside Page.content.rendered, with no programme, indication, or trial-phase
+  entity.

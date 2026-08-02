@@ -1,0 +1,158 @@
+generated: '2026-08-02'
+method: derived
+source: openapi/abcuro-content-openapi.yml + live probes of https://abcuro.com/wp-json/
+note: >-
+  Derived from the observed contract, not from any compliance claim by Abcuro. The company
+  publishes no trust center, no certification page, no security page and no security.txt
+  (probe-security-programs.py returned vdp=none trust=none on 2026-08-02), so no Compliance
+  pointer is emitted in apis.yml. Regulatory obligations that attach to Abcuro as a clinical-stage
+  biotech (FDA/EMA clinical trial disclosure, HIPAA where patient data is involved) are recorded
+  under regulatory_context as company posture, NOT as API conformance — no patient or clinical data
+  is exposed on this API surface.
+
+standards:
+- id: rest
+  conforms: true
+  evidence: >-
+    Resource-oriented paths, HTTP verb semantics, JSON representations, and hypermedia _links on
+    every record. Observed across all 30 modelled operations.
+- id: openapi-3.1
+  conforms: true
+  caveat: derived-by-third-party
+  evidence: >-
+    openapi/abcuro-content-openapi.yml is a valid OpenAPI 3.1.0 document, but it was derived by API
+    Evangelist from the live route index. Abcuro publishes no OpenAPI of its own.
+- id: rfc8288-web-linking
+  conforms: true
+  evidence: >-
+    Collection responses return a Link header carrying rel="next" / rel="prev"; every record body
+    carries a _links object using the https://api.w.org/ curie with self, collection, about, author,
+    wp:attachment and wp:term relations.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    Errors are returned as application/json with a {code, message, data.status} envelope. No type
+    URI, no title member, no instance, and not the application/problem+json media type. See
+    errors/abcuro-problem-types.yml.
+- id: rfc7617-http-basic
+  conforms: true
+  evidence: >-
+    The route index advertises WordPress application passwords, which are HTTP Basic over TLS, with
+    the authorization endpoint at https://abcuro.com/wp-admin/authorize-application.php. Not
+    obtainable by the public.
+- id: oembed-1.0
+  conforms: true
+  evidence: >-
+    The oembed/1.0 namespace is registered; GET /oembed/1.0/embed?url=https://abcuro.com/ returned
+    200 with a conformant oEmbed 1.0 document.
+- id: oauth2
+  conforms: false
+  evidence: >-
+    No oauth2 security scheme in the contract; /.well-known/oauth-authorization-server and
+    /.well-known/oauth-protected-resource both returned 404.
+- id: oidc
+  conforms: false
+  evidence: /.well-known/openid-configuration returned 404 on abcuro.com and www.abcuro.com.
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: /.well-known/security.txt returned 404 (HTML 404 page) on every host probed.
+- id: rfc8615-well-known
+  conforms: false
+  evidence: >-
+    No /.well-known/ path returned a discovery document on any host. See
+    well-known/abcuro-well-known.yml.
+- id: rfc9727-api-catalog
+  conforms: false
+  evidence: /.well-known/api-catalog returned 404.
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: No Sunset or Deprecation header observed on any response.
+- id: a2a-agent-card
+  conforms: false
+  evidence: >-
+    /.well-known/agent-card.json and the legacy /.well-known/agent.json both returned 404 with an
+    HTML body on abcuro.com and www.abcuro.com. No agent card exists, and none was authored.
+- id: asyncapi
+  conforms: false
+  applicable: false
+  evidence: >-
+    The provider exposes no event, streaming or webhook surface, so the asyncapi family is not
+    applicable rather than failed.
+- id: json-api
+  conforms: false
+  evidence: Responses are plain JSON arrays/objects, not the JSON:API document structure.
+- id: odata
+  conforms: false
+- id: scim2
+  conforms: false
+- id: fhir-r4
+  conforms: false
+  evidence: >-
+    No health-data resources are exposed. The API serves corporate marketing content only — no
+    patient, trial-subject or clinical dataset.
+- id: fapi
+  conforms: false
+  applicable: false
+- id: pagination
+  conforms: true
+  evidence: >-
+    page/per_page with X-WP-Total and X-WP-TotalPages response headers, observed live on every
+    collection. See conventions/abcuro-conventions.yml.
+- id: idempotency
+  conforms: false
+  evidence: >-
+    No idempotency key header, replay window or deduplication contract exists in the WordPress REST
+    API. See conventions/abcuro-conventions.yml.
+- id: tls
+  conforms: true
+  caveat: TLSv1.2 only on abcuro.com; no HSTS
+  evidence: security/abcuro-domain-security.yml (probed 2026-08-02).
+
+regulatory_context:
+  note: >-
+    Recorded for completeness because Abcuro is a clinical-stage biopharmaceutical company. None of
+    these regimes apply to the API surface catalogued here, which exposes no personal, patient or
+    clinical data.
+  regimes:
+  - id: fda-ind-clinical-disclosure
+    applies_to: company
+    applies_to_api: false
+    evidence: >-
+      Abcuro runs the registrational Phase 2/3 MUSCLE trial of ulviprubart; trial registration and
+      results disclosure obligations attach to ClinicalTrials.gov, not to abcuro.com.
+  - id: hipaa
+    applies_to_api: false
+    evidence: No protected health information is exposed by any modelled operation.
+  - id: gdpr
+    applies_to_api: partial
+    evidence: >-
+      /wp/v2/users answers anonymously and returns author display names and slugs, and
+      /wp/v2/abcuro_people returns named executives and board members. Both are intentionally
+      public corporate biographical content, but the /wp/v2/users author enumeration is a
+      WordPress default rather than a deliberate publication. Abcuro publishes a privacy policy at
+      https://abcuro.com/privacy-policy/.
+
+security_posture_findings:
+- id: user-enumeration
+  severity: low
+  finding: >-
+    GET /wp/v2/users returns 200 anonymously with 4 author accounts including their slugs. This is a
+    WordPress default that leaks valid login names and is commonly disabled on production sites.
+  evidence: 'GET https://abcuro.com/wp-json/wp/v2/users?per_page=2 -> 200, X-WP-Total: 4'
+  remediation: Filter rest_endpoints to unregister the users collection for unauthenticated requests.
+- id: no-hsts
+  severity: low
+  finding: abcuro.com serves no Strict-Transport-Security header.
+  evidence: security/abcuro-domain-security.yml
+- id: tls-1-2-only
+  severity: informational
+  finding: abcuro.com negotiated TLSv1.2; TLSv1.3 was not offered.
+  evidence: security/abcuro-domain-security.yml
+- id: no-dmarc
+  severity: low
+  finding: abcuro.com publishes SPF but no DMARC record and no CAA records.
+  evidence: security/abcuro-domain-security.yml
+- id: no-security-txt
+  severity: low
+  finding: No RFC 9116 security.txt and no published vulnerability disclosure channel.
+  evidence: well-known/abcuro-well-known.yml

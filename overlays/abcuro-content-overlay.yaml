@@ -1,0 +1,116 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Abcuro Content API
+  version: 1.0.0
+  description: >-
+    Captures the API Evangelist enrichment layer over openapi/abcuro-content-openapi.yml as
+    OpenAPI Overlay 1.0.0 actions, so the derived spec stays separable from our annotations.
+    Records provenance, the derived-not-official caveat, the observed consumer-facing behaviours,
+    and the security-posture findings.
+extends: openapi/abcuro-content-openapi.yml
+
+actions:
+- target: $.info
+  description: Provenance and enrichment metadata.
+  update:
+    x-apievangelist-enriched: '2026-08-02'
+    x-apievangelist-slug: abcuro
+    x-apievangelist-pass: local-v1
+    x-apievangelist-method: derived
+    x-apievangelist-source: https://abcuro.com/wp-json/
+    x-apievangelist-official: false
+    x-apievangelist-surface-class: corporate-content-api
+    x-apievangelist-note: >-
+      Abcuro is a clinical-stage biotech with no developer platform. This contract was derived from
+      the live WordPress REST route index; it is not published or endorsed by Abcuro.
+
+- target: $.info
+  description: Cross-reference the artifacts derived alongside this spec.
+  update:
+    x-apievangelist-artifacts:
+      authentication: authentication/abcuro-authentication.yml
+      conventions: conventions/abcuro-conventions.yml
+      errors: errors/abcuro-problem-types.yml
+      lifecycle: lifecycle/abcuro-lifecycle.yml
+      conformance: conformance/abcuro-conformance.yml
+      data_model: data-model/abcuro-data-model.yml
+      agentic_access: agentic-access/abcuro-agentic-access.yml
+      well_known: well-known/abcuro-well-known.yml
+      domain_security: security/abcuro-domain-security.yml
+      mcp: mcp/abcuro-mcp.yml
+      tool_crosswalk: mcp/abcuro-tool-crosswalk.yml
+      skills: skills/_index.yml
+      routes_original: openapi/_original/abcuro-wp-json-routes.json
+
+- target: $.info
+  description: Record what this API does NOT carry, so consumers do not plan around it.
+  update:
+    x-apievangelist-not-available:
+    - No developer portal, API key, signup, pricing, SDK, CLI, Postman collection or sandbox.
+    - No changelog, versioning policy, deprecation policy, SLA or status page.
+    - No security.txt, vulnerability disclosure programme or trust center.
+    - No A2A agent card at either /.well-known/agent-card.json or /.well-known/agent.json.
+    - No event, streaming or webhook surface, therefore no AsyncAPI.
+    - No idempotency contract.
+    - No documented rate limits and no rate-limit response headers.
+
+- target: $.servers[0]
+  description: Note the absence of any non-production environment.
+  update:
+    x-apievangelist-environment: production
+    x-apievangelist-sandbox: none
+
+- target: $.components.securitySchemes.applicationPassword
+  description: Flag that the write credential is not publicly obtainable.
+  update:
+    x-apievangelist-public-availability: none
+    x-apievangelist-note: >-
+      Application passwords are issued from wp-admin by an existing WordPress user. No self-serve
+      path exists; the entire write surface is out of reach for third parties.
+
+- target: $.paths['/wp/v2/users'].get
+  description: Flag the anonymous author-enumeration exposure.
+  update:
+    x-apievangelist-finding: user-enumeration
+    x-apievangelist-severity: low
+    x-apievangelist-note: >-
+      Returns 200 anonymously with 4 author accounts including login slugs. A WordPress default
+      commonly disabled in production. Recorded in conformance/abcuro-conformance.yml.
+
+- target: $.paths['/wp/v2/abcuro_pubs'].get
+  description: Note the missing bibliographic structure.
+  update:
+    x-apievangelist-note: >-
+      Publication records carry no structured DOI, journal, PubMed id or author list. Citation
+      detail is embedded in content.rendered HTML and must be parsed, not queried.
+
+- target: $.paths['/wp/v2/abcuro_investors'].get
+  description: Note the missing investor structure.
+  update:
+    x-apievangelist-note: >-
+      Investor records carry only id, slug and title. There is no URL, logo reference, round or
+      date field; the acf object is empty on every record sampled.
+
+- target: $.paths['/wp/v2/abcuro_jobs'].get
+  description: Note the empty collection.
+  update:
+    x-apievangelist-note: >-
+      Registered and readable but empty (X-WP-Total 0 on 2026-08-02). The Careers page links no
+      applicant tracking system either.
+
+- target: $.paths['/wp/v2/search'].get
+  description: Highlight the one cross-type entry point.
+  update:
+    x-apievangelist-recommended-entry-point: true
+    x-apievangelist-note: >-
+      The only operation that spans every content type in one call. Returns a thin projection
+      (id, title, url, type, subtype) plus _links.self to the full record.
+
+- target: $.paths['/'].get
+  description: Mark the route index as the authoritative discovery document.
+  update:
+    x-apievangelist-discovery: true
+    x-apievangelist-note: >-
+      This response IS the machine-readable contract for this deployment — 175 routes with
+      per-route argument schemas. Because Abcuro publishes no versioning or deprecation policy,
+      clients should re-read it and reconcile rather than hard-code paths.

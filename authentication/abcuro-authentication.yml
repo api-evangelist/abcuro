@@ -1,0 +1,26 @@
+generated: '2026-08-02'
+method: derived
+source: openapi/abcuro-content-openapi.yml
+summary:
+  types:
+  - apiKey
+  - http
+  api_key_in:
+  - header
+schemes:
+- name: applicationPassword
+  type: http
+  scheme: basic
+  description: WordPress application passwords (RFC 7617 Basic over TLS). The live route index
+    advertises the authorization endpoint at https://abcuro.com/wp-admin/authorize-application.php.
+    Required for every write operation and for the edit context; not available to the public.
+  sources:
+  - openapi/abcuro-content-openapi.yml
+- name: cookieNonce
+  type: apiKey
+  in: header
+  parameter: X-WP-Nonce
+  description: WordPress cookie authentication paired with an X-WP-Nonce header; used by the
+    site's own admin and block-editor UI.
+  sources:
+  - openapi/abcuro-content-openapi.yml

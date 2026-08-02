@@ -1,0 +1,196 @@
+generated: '2026-08-02'
+method: derived
+source: openapi/abcuro-content-openapi.yml + live probes of https://abcuro.com/wp-json/
+docs: https://developer.wordpress.org/rest-api/using-the-rest-api/
+note: >-
+  Abcuro publishes no API documentation of its own. These conventions are the WordPress REST API
+  contract as observed live on abcuro.com and confirmed against the upstream WordPress REST API
+  handbook. They are accurate for this deployment but they are WordPress core behaviour, not an
+  Abcuro-authored contract.
+
+authentication:
+  public_read: true
+  note: >-
+    Every GET operation modelled in openapi/abcuro-content-openapi.yml answers anonymously over TLS.
+    No API key, token, or account is required or available. Write operations and the edit context
+    require WordPress cookie+nonce or an application password and are not obtainable by the public.
+  schemes:
+  - applicationPassword (HTTP Basic, RFC 7617)
+  - cookieNonce (X-WP-Nonce header)
+  authorization_endpoint: https://abcuro.com/wp-admin/authorize-application.php
+  see: authentication/abcuro-authentication.yml
+
+idempotency:
+  supported: false
+  note: >-
+    The WordPress REST API defines no idempotency-key header, no request-replay window, and no
+    deduplication contract. PUT/PATCH on an item id is naturally idempotent by HTTP semantics, but
+    POST to a collection is not, and there is no mechanism to make it safe to retry. No Idempotency
+    pointer is emitted for this provider — there is nothing to point at.
+
+pagination:
+  style: page-number
+  parameters:
+  - name: page
+    default: 1
+    minimum: 1
+    description: Current page of the collection.
+  - name: per_page
+    default: 10
+    minimum: 1
+    maximum: 100
+    description: Maximum number of items returned per page.
+  - name: offset
+    description: Offset the result set by a specific number of items (collections of post types only).
+  response_headers:
+  - name: X-WP-Total
+    description: Total number of items in the collection.
+  - name: X-WP-TotalPages
+    description: Total number of pages available.
+  - name: Link
+    description: RFC 8288 link header carrying rel="next" and rel="prev".
+  observed:
+  - collection: /wp/v2/posts
+    x_wp_total: 28
+  - collection: /wp/v2/pages
+    x_wp_total: 17
+  - collection: /wp/v2/media
+    x_wp_total: 141
+  - collection: /wp/v2/abcuro_people
+    x_wp_total: 26
+  - collection: /wp/v2/abcuro_investors
+    x_wp_total: 15
+  - collection: /wp/v2/abcuro_pubs
+    x_wp_total: 13
+  - collection: /wp/v2/abcuro_jobs
+    x_wp_total: 0
+  note: >-
+    Deep pagination beyond per_page=100 requires walking page; there is no cursor. Over-paging past
+    the last page returns 400 rest_post_invalid_page_number.
+
+sparse_fieldsets:
+  supported: true
+  parameter: _fields
+  style: comma-separated field list
+  example: /wp/v2/abcuro_pubs?_fields=id,slug,title,link
+  note: Applies to every endpoint; the single highest-leverage parameter on this API, since full
+    records embed large rendered HTML and Yoast SEO head blobs.
+
+expansion:
+  supported: true
+  parameter: _embed
+  style: HAL-adjacent — linked resources are inlined under an _embedded object
+  embeds:
+  - author
+  - wp:featuredmedia
+  - wp:term
+  note: >-
+    Every record carries a _links object with self, collection, about, author, wp:attachment and
+    wp:term relations using the https://api.w.org/ curie. _embed resolves those links in one call.
+
+filtering_and_sort:
+  search: search (free-text within a collection)
+  date_windows: [after, before, modified_after, modified_before]
+  ordering:
+    parameter: orderby
+    default: date
+    direction: order (asc|desc, default desc)
+  inclusion: [include, exclude, slug, status]
+  taxonomy_filters:
+  - person_role (on /wp/v2/abcuro_people)
+  - categories, categories_exclude, tags, tags_exclude (on /wp/v2/posts)
+  cross_type_search:
+    endpoint: /wp/v2/search
+    subtypes: [post, page, abcuro_people, abcuro_investors, abcuro_jobs, abcuro_pubs, category,
+      post_tag, person_role, any]
+
+content_negotiation:
+  request: query parameters only for reads; application/json bodies for writes
+  response: application/json; charset=UTF-8
+  context:
+    parameter: context
+    values: [view, embed, edit]
+    default: view
+    note: edit requires authentication and returns 401 rest_forbidden anonymously.
+  rendered_fields: >-
+    title, content and excerpt are objects with a "rendered" string containing HTML, not plain text.
+    Clients must handle HTML entities (the site title returns "Autoimmune Diseases &amp; Cancer").
+  method_override:
+    parameter: _method
+    header: X-HTTP-Method-Override
+    note: WordPress core supports tunnelling PUT/DELETE through POST for restricted clients.
+  jsonp:
+    parameter: _jsonp
+    note: Supported by WordPress core when enabled.
+  envelope:
+    parameter: _envelope
+    note: Wraps the response in {body, status, headers} for clients that cannot read status codes.
+
+versioning:
+  scheme: namespace-in-path
+  current: wp/v2
+  namespaces_registered:
+  - wp/v2
+  - oembed/1.0
+  - wp-site-health/v1
+  - wp-block-editor/v1
+  - genesis/v1
+  - yoast/v1
+  - redirection/v1
+  - pum/v1
+  note: >-
+    Version is a URL namespace segment, not a header or date. Abcuro publishes no versioning policy,
+    no deprecation policy and no changelog; the effective version contract is whatever WordPress core
+    and the installed plugins ship. See lifecycle/abcuro-lifecycle.yml.
+
+error_envelope:
+  format: wordpress-rest-error
+  rfc9457: false
+  media_type: application/json
+  shape:
+    code: machine-readable string code
+    message: human-readable message
+    data:
+      status: HTTP status code
+      params: per-parameter validation messages (rest_invalid_param only)
+      details: per-parameter validation details (rest_invalid_param only)
+  observed_example:
+    request: GET https://abcuro.com/wp-json/wp/v2/settings
+    status: 401
+    body: '{"code":"rest_forbidden","message":"Sorry, you are not allowed to do that.","data":{"status":401}}'
+  see: errors/abcuro-problem-types.yml
+
+request_tracing:
+  request_id_header: none
+  note: No correlation or request-id header is returned. Debugging relies on the client's own
+    correlation.
+
+rate_limiting:
+  documented: false
+  headers_observed: none
+  note: >-
+    No RateLimit, X-RateLimit-* or Retry-After headers were observed on any probe. WordPress core
+    ships no rate limiter; any throttling is imposed at the CDN/host layer and is undocumented. Do
+    not assume unlimited throughput — treat this as an unmetered but unguaranteed public surface and
+    apply client-side backoff on 429/503.
+
+caching:
+  headers_observed: [Link, X-WP-Total, X-WP-TotalPages]
+  etag: not observed on wp-json responses
+  conditional_requests: not supported on the REST surface
+  note: Content changes are infrequent (press releases and publications); poll conservatively.
+
+batching:
+  endpoint: /batch/v1
+  method: POST
+  note: >-
+    WordPress core's batch endpoint is registered on this site but requires authentication for any
+    useful operation; it is not part of the public read surface.
+
+cross_links:
+  authentication: authentication/abcuro-authentication.yml
+  errors: errors/abcuro-problem-types.yml
+  lifecycle: lifecycle/abcuro-lifecycle.yml
+  conformance: conformance/abcuro-conformance.yml
+  data_model: data-model/abcuro-data-model.yml
+  openapi: openapi/abcuro-content-openapi.yml

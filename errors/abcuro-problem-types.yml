@@ -1,0 +1,153 @@
+generated: '2026-08-02'
+method: probed
+source: live error responses observed against https://abcuro.com/wp-json/ on 2026-08-02
+format: wordpress-rest-error
+rfc9457: false
+media_type: application/json
+note: >-
+  Abcuro publishes no error reference. Every entry below was OBSERVED by issuing a real request
+  against abcuro.com and recording the exact response body — none are copied from the WordPress
+  handbook or inferred. The envelope is not RFC 9457 problem+json: there is no type URI, no title,
+  no instance, and the media type is application/json. The machine-readable discriminator is the
+  string `code`; the HTTP status is duplicated inside data.status.
+
+envelope:
+  fields:
+  - name: code
+    type: string
+    description: Machine-readable error code. This is the field to branch on.
+  - name: message
+    type: string
+    description: Human-readable message, localised to the site locale (en_US here).
+  - name: data.status
+    type: integer
+    description: HTTP status code, duplicated in the body.
+  - name: data.params
+    type: object
+    description: Map of parameter name to a human-readable validation message. Present only on
+      rest_invalid_param.
+  - name: data.details
+    type: object
+    description: Map of parameter name to a structured validation detail object (code, message,
+      data). Present only on rest_invalid_param.
+
+problems:
+- code: rest_post_invalid_id
+  status: 404
+  title: Invalid post ID
+  message: Invalid post ID.
+  observed_request: GET /wp/v2/posts/999999
+  applies_to:
+  - getPost
+  - getPage
+  - getMediaItem
+  - getPerson
+  - getInvestor
+  - getPublication
+  - getJob
+  remediation: >-
+    The numeric id does not resolve to a published record of that post type. List the collection
+    first and use an id from it; ids are not stable across content rebuilds.
+
+- code: rest_term_invalid
+  status: 404
+  title: Term does not exist
+  message: Term does not exist.
+  observed_request: GET /wp/v2/categories/999999
+  applies_to:
+  - getCategory
+  - getTag
+  - getPersonRole
+  remediation: List the taxonomy collection and use a returned term id.
+
+- code: rest_user_invalid_id
+  status: 404
+  title: Invalid user ID
+  message: Invalid user ID.
+  observed_request: GET /wp/v2/users/999999
+  applies_to:
+  - getUser
+  remediation: List /wp/v2/users and use a returned id.
+
+- code: rest_no_route
+  status: 404
+  title: No route was found matching the URL and request method
+  message: No route was found matching the URL and request method.
+  observed_request: GET /wp/v2/nope
+  applies_to: all
+  remediation: >-
+    The path or the method is not registered. GET https://abcuro.com/wp-json/ and read the routes
+    object — it is the authoritative route index for this deployment, including which methods each
+    route accepts.
+
+- code: rest_invalid_param
+  status: 400
+  title: Invalid parameter(s)
+  message: 'Invalid parameter(s): per_page'
+  observed_request: GET /wp/v2/posts?per_page=500
+  observed_body: '{"code":"rest_invalid_param","message":"Invalid parameter(s): per_page","data":{"status":400,"params":{"per_page":"per_page
+    must be between 1 (inclusive) and 100 (inclusive)"}}}'
+  applies_to: all
+  remediation: >-
+    Read data.params for the per-parameter reason. Bounds are published in the route index args
+    (per_page max 100, page min 1). This is the only error that carries structured field-level detail.
+
+- code: rest_post_invalid_page_number
+  status: 400
+  title: The page number requested is larger than the number of pages available
+  message: The page number requested is larger than the number of pages available.
+  observed_request: GET /wp/v2/posts?page=9999
+  applies_to:
+  - listPosts
+  - listPages
+  - listMediaItems
+  - listPeople
+  - listInvestors
+  - listPublications
+  - listJobs
+  remediation: >-
+    Read X-WP-TotalPages from the first page and stop there. Do not page until an empty array —
+    over-paging is a 400, not a 200 with [].
+
+- code: rest_forbidden_context
+  status: 401
+  title: Sorry, you are not allowed to edit posts in this post type
+  message: Sorry, you are not allowed to edit posts in this post type.
+  observed_request: GET /wp/v2/abcuro_pubs?context=edit
+  applies_to: all list and get operations
+  remediation: >-
+    context=edit requires an authenticated user with edit capability. Use context=view (the default)
+    or context=embed. Note the status is 401, not 403, even though it is an authorization failure.
+
+- code: rest_forbidden
+  status: 401
+  title: Sorry, you are not allowed to do that
+  message: Sorry, you are not allowed to do that.
+  observed_request: GET /wp/v2/settings
+  applies_to: every authenticated-only route (settings, plugins, themes, the plugin namespaces)
+  remediation: >-
+    The route requires WordPress cookie+nonce or an application password. These credentials are not
+    available to the public; treat the route as out of scope.
+
+- code: rest_cookie_invalid_nonce
+  status: 403
+  title: Cookie check failed
+  message: Cookie check failed
+  observed: false
+  note: >-
+    Documented by WordPress core for cookie-authenticated clients that send a stale X-WP-Nonce.
+    Not reproducible anonymously, so recorded as a known code rather than an observed one.
+  remediation: Refresh the nonce from wpApiSettings and retry.
+
+not_observed:
+  rate_limit_429: >-
+    No 429 was produced by any probe and no RateLimit/Retry-After headers were seen. A 429 or 503
+    from the CDN/host layer remains possible and would not carry the WordPress error envelope —
+    clients should treat any non-JSON body as an infrastructure error.
+  server_5xx: >-
+    No 5xx was observed. WordPress core returns 500 with the same envelope
+    (code: internal_server_error) when a PHP error is caught.
+
+cross_links:
+  conventions: conventions/abcuro-conventions.yml
+  openapi: openapi/abcuro-content-openapi.yml

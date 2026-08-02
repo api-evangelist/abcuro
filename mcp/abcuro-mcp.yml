@@ -1,0 +1,167 @@
+generated: '2026-08-02'
+method: derived
+status: candidate
+source: openapi/abcuro-content-openapi.yml
+note: >-
+  Abcuro publishes NO MCP server. Searches of the provider's site, the MCP registries and the npm
+  @modelcontextprotocol scope returned nothing, and no /mcp or /sse endpoint answered on any Abcuro
+  host. The tools below are a CANDIDATE surface derived one-for-one from the operations in the
+  derived OpenAPI — a design proposal for what an MCP server over this API would expose, not a
+  server that exists. Every tool binds to a real operationId; each tool's input schema is that
+  operation's parameters in openapi/abcuro-content-openapi.yml.
+
+search:
+  registries_checked:
+  - name: npm @modelcontextprotocol scope
+    result: no Abcuro package
+  - name: npm full-text search "abcuro"
+    result: 0 results
+  - name: PyPI / RubyGems / NuGet / crates.io
+    result: 404 for "abcuro"
+  endpoints_probed:
+  - url: https://abcuro.com/mcp
+    result: 404
+  - url: https://abcuro.com/.well-known/ai-plugin.json
+    result: 404
+  - url: https://abcuro.com/.well-known/oauth-protected-resource
+    result: 404
+  conclusion: no published MCP server
+
+server:
+  name: abcuro-content
+  status: candidate
+  transport: http
+  url: null
+  upstream: https://abcuro.com/wp-json
+  auth: none required for the read surface
+
+tools:
+- name: search_abcuro
+  description: >-
+    Search all Abcuro site content — press releases, publications, people, investors and pages —
+    with one query. The best entry point; returns id, title, url, type and subtype.
+  source_operation: openapi/abcuro-content-openapi.yml#search
+  category: search
+  consequence: read
+
+- name: list_press_releases
+  description: List Abcuro press releases (the News feed), newest first. Supports date windows via
+    after/before and free-text via search.
+  source_operation: openapi/abcuro-content-openapi.yml#listPosts
+  category: press
+  consequence: read
+
+- name: get_press_release
+  description: Retrieve one press release by id, including its full rendered HTML body.
+  source_operation: openapi/abcuro-content-openapi.yml#getPost
+  category: press
+  consequence: read
+
+- name: list_publications
+  description: List Abcuro scientific publications (abcuro_pubs), including MUSCLE-trial and
+    ulviprubart papers.
+  source_operation: openapi/abcuro-content-openapi.yml#listPublications
+  category: science
+  consequence: read
+
+- name: get_publication
+  description: Retrieve one publication record by id. Citation detail is inside content.rendered
+    HTML, not structured fields.
+  source_operation: openapi/abcuro-content-openapi.yml#getPublication
+  category: science
+  consequence: read
+
+- name: list_people
+  description: >-
+    List Abcuro people records — leadership, team and board of directors. Filter with the
+    person_role term ids (3 team, 4 leadership, 5 board).
+  source_operation: openapi/abcuro-content-openapi.yml#listPeople
+  category: company
+  consequence: read
+
+- name: get_person
+  description: Retrieve one person record by id.
+  source_operation: openapi/abcuro-content-openapi.yml#getPerson
+  category: company
+  consequence: read
+
+- name: list_person_roles
+  description: List the person_role taxonomy terms used to partition people into leadership, team
+    and board.
+  source_operation: openapi/abcuro-content-openapi.yml#listPersonRoles
+  category: company
+  consequence: read
+
+- name: list_investors
+  description: List Abcuro investor records.
+  source_operation: openapi/abcuro-content-openapi.yml#listInvestors
+  category: company
+  consequence: read
+
+- name: get_investor
+  description: Retrieve one investor record by id.
+  source_operation: openapi/abcuro-content-openapi.yml#getInvestor
+  category: company
+  consequence: read
+
+- name: list_pages
+  description: >-
+    List the static site pages — about, science, pipeline, clinical trials, careers, contact and
+    legal. This is where the clinical programme narrative lives.
+  source_operation: openapi/abcuro-content-openapi.yml#listPages
+  category: content
+  consequence: read
+
+- name: get_page
+  description: Retrieve one page by id, including its full rendered HTML body.
+  source_operation: openapi/abcuro-content-openapi.yml#getPage
+  category: content
+  consequence: read
+
+- name: list_media
+  description: >-
+    List media library assets — images, investor logos, the ulviprubart infographic, and PDFs
+    including presented MUSCLE trial data. Filter by mime_type to find documents.
+  source_operation: openapi/abcuro-content-openapi.yml#listMediaItems
+  category: assets
+  consequence: read
+
+- name: get_media_item
+  description: Retrieve one media asset by id, including source_url and media_details.
+  source_operation: openapi/abcuro-content-openapi.yml#getMediaItem
+  category: assets
+  consequence: read
+
+- name: list_jobs
+  description: List Abcuro job postings. The collection is registered but currently empty.
+  source_operation: openapi/abcuro-content-openapi.yml#listJobs
+  category: careers
+  consequence: read
+
+- name: describe_site_api
+  description: >-
+    Return the WordPress route index for abcuro.com — namespaces, routes and per-route argument
+    schemas. Use this to reconcile against contract drift, since Abcuro publishes no versioning or
+    deprecation policy.
+  source_operation: openapi/abcuro-content-openapi.yml#getRoot
+  category: discovery
+  consequence: read
+
+excluded_from_candidate_surface:
+- operations: [listUsers, getUser]
+  reason: >-
+    Returns WordPress author accounts and enumerates login slugs. Exposing it as an agent tool would
+    amplify a known low-severity information-disclosure default for no consumer value.
+- operations: [listComments, getComment, listTags, getTag, listCategories, getCategory,
+    listTaxonomies, listStatuses, getOembed]
+  reason: Empty or purely structural; no consumer value as a standalone tool.
+- surface: every write operation
+  reason: >-
+    POST/PUT/PATCH/DELETE require WordPress cookie+nonce or an application password, which cannot be
+    obtained by a third party. The candidate server is read-only by construction.
+
+cross_links:
+  crosswalk: mcp/abcuro-tool-crosswalk.yml
+  openapi: openapi/abcuro-content-openapi.yml
+  agentic_access: agentic-access/abcuro-agentic-access.yml
+  skills: skills/_index.yml

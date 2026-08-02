@@ -1,0 +1,167 @@
+generated: '2026-08-02'
+method: derived
+source: mcp/abcuro-mcp.yml + openapi/abcuro-content-openapi.yml
+note: >-
+  Binds every candidate MCP tool to its backing OpenAPI operation. Because the tool set was itself
+  derived from the spec (Abcuro publishes no MCP server), every binding is exact and confidence is
+  high throughout — there is no name-matching guesswork here, and no divergence between a published
+  tool list and the contract. What this crosswalk documents instead is the deliberate coverage
+  decision: which REST operations were promoted to tools and which were withheld, and why.
+
+surfaces:
+  openapi:
+    file: openapi/abcuro-content-openapi.yml
+    status: derived-by-api-evangelist
+    gated: false
+    operations: 30
+    note: >-
+      Derived from https://abcuro.com/wp-json/ (fetched 2026-08-02). Models only the GET surface
+      that answers anonymously.
+  graphql:
+    endpoint: null
+    status: none
+    note: >-
+      https://abcuro.com/graphql returned 404 with the theme HTML 404 page. WPGraphQL is not
+      installed; the wp-json route index registers no graphql namespace.
+  mcp:
+    url: null
+    status: candidate
+    gated: not-applicable
+    note: >-
+      No hosted MCP server exists. tools/list was never issued because there is no endpoint to
+      issue it against.
+  rest_write_surface:
+    status: registered-but-gated
+    note: >-
+      The live route index registers POST/PUT/PATCH/DELETE on most wp/v2 collections and the
+      redirection/v1, yoast/v1, genesis/v1, pum/v1, wp-site-health/v1 and wp-block-editor/v1
+      namespaces. All require WordPress cookie+nonce or an application password, none of which are
+      publicly obtainable, so none are modelled in the OpenAPI or bound here.
+
+crosswalk:
+- tool: search_abcuro
+  category: search
+  rest: [search]
+  binding: rest
+  confidence: high
+  note: One-to-one. The only cross-type operation; subtype narrows to any registered post type or
+    taxonomy.
+- tool: list_press_releases
+  category: press
+  rest: [listPosts]
+  binding: rest
+  confidence: high
+- tool: get_press_release
+  category: press
+  rest: [getPost]
+  binding: rest
+  confidence: high
+- tool: list_publications
+  category: science
+  rest: [listPublications]
+  binding: rest
+  confidence: high
+- tool: get_publication
+  category: science
+  rest: [getPublication]
+  binding: rest
+  confidence: high
+- tool: list_people
+  category: company
+  rest: [listPeople]
+  binding: rest
+  confidence: high
+  note: person_role filtering is a query parameter on the same operation, not a separate tool.
+- tool: get_person
+  category: company
+  rest: [getPerson]
+  binding: rest
+  confidence: high
+- tool: list_person_roles
+  category: company
+  rest: [listPersonRoles]
+  binding: rest
+  confidence: high
+- tool: list_investors
+  category: company
+  rest: [listInvestors]
+  binding: rest
+  confidence: high
+- tool: get_investor
+  category: company
+  rest: [getInvestor]
+  binding: rest
+  confidence: high
+- tool: list_pages
+  category: content
+  rest: [listPages]
+  binding: rest
+  confidence: high
+- tool: get_page
+  category: content
+  rest: [getPage]
+  binding: rest
+  confidence: high
+- tool: list_media
+  category: assets
+  rest: [listMediaItems]
+  binding: rest
+  confidence: high
+- tool: get_media_item
+  category: assets
+  rest: [getMediaItem]
+  binding: rest
+  confidence: high
+- tool: list_jobs
+  category: careers
+  rest: [listJobs]
+  binding: rest
+  confidence: high
+  note: Backing collection answers 200 with an empty array; the tool is bound but returns nothing
+    today.
+- tool: describe_site_api
+  category: discovery
+  rest: [getRoot]
+  binding: rest
+  confidence: high
+
+mcp_only: []
+
+graphql_only: []
+
+rest_only:
+- operations: [listUsers, getUser]
+  capability: author accounts
+  reason: >-
+    Deliberately withheld. Answers anonymously and enumerates WordPress login slugs (4 accounts);
+    promoting it to an agent tool would amplify a known information-disclosure default for no
+    consumer value. Recorded as a finding in conformance/abcuro-conformance.yml.
+- operations: [listComments, getComment]
+  capability: comments
+  reason: Collection is empty and comments are not enabled anywhere on the site.
+- operations: [listCategories, getCategory, listTags, getTag]
+  capability: post taxonomy
+  reason: >-
+    One category term ("Press Release") and zero tags. No filtering value; the taxonomy is
+    reachable as a parameter on listPosts if ever needed.
+- operations: [listTypes, listTaxonomies, listStatuses]
+  capability: schema introspection
+  reason: Subsumed by describe_site_api, which returns the full route index in one call.
+- operations: [getOembed]
+  capability: oEmbed
+  reason: Presentation-layer concern; returns an embed shell rather than content.
+
+coverage:
+  rest_operations_total: 30
+  rest_operations_with_a_tool: 16
+  rest_operations_withheld: 14
+  tools_named: 16
+  tools_bound_to_rest: 16
+  tools_unbound: 0
+  mcp_only: 0
+  graphql_only: 0
+  binding_rate: 1.0
+  note: >-
+    Binding rate is 1.0 by construction — the tool set was derived from the spec, so no tool can
+    exist without a backing operation. The meaningful number is coverage of the REST surface:
+    16 of 30 operations promoted, 14 withheld for the documented reasons above.

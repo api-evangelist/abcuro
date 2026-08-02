@@ -1,0 +1,78 @@
+generated: '2026-08-02'
+method: probed
+source: live HTTPS probes of every host in apis.yml and the OpenAPI servers[]
+note: >-
+  Every /.well-known/ path probed on abcuro.com and www.abcuro.com returned HTTP 404 with the
+  WordPress theme 404 page (text/html), not a discovery document. api.abcuro.com does not resolve.
+  Absence is the recorded result; no documents were saved. The site does publish robots.txt and a
+  Yoast SEO sitemap index, recorded below as the non-well-known discovery surface that does exist.
+hosts:
+- host: https://abcuro.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    content_type: text/html
+  - path: /.well-known/openid-configuration
+    status: 404
+    content_type: text/html
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    content_type: text/html
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    content_type: text/html
+  - path: /.well-known/api-catalog
+    status: 404
+    content_type: text/html
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    content_type: text/html
+  - path: /.well-known/agent-card.json
+    status: 404
+    content_type: text/html
+  - path: /.well-known/agent.json
+    status: 404
+    content_type: text/html
+- host: https://www.abcuro.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    content_type: text/html
+  - path: /.well-known/openid-configuration
+    status: 404
+    content_type: text/html
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    content_type: text/html
+  - path: /.well-known/api-catalog
+    status: 404
+    content_type: text/html
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    content_type: text/html
+  - path: /.well-known/agent-card.json
+    status: 404
+    content_type: text/html
+  - path: /.well-known/agent.json
+    status: 404
+    content_type: text/html
+- host: https://api.abcuro.com
+  resolves: false
+  note: DNS does not resolve; every probe returned curl exit code 6 (could not resolve host).
+other_discovery:
+- path: /robots.txt
+  status: 200
+  url: https://abcuro.com/robots.txt
+  note: Disallows /wp-admin/ except admin-ajax.php.
+- path: /sitemap_index.xml
+  status: 200
+  url: https://abcuro.com/sitemap_index.xml
+  note: Yoast SEO sitemap index.
+- path: /wp-json/
+  status: 200
+  url: https://abcuro.com/wp-json/
+  note: >-
+    The WordPress REST API root. This is the site's real machine-readable discovery document — it
+    returns the site identity, the eight registered namespaces, the advertised authentication scheme
+    (application passwords), and a 175-route index with per-route argument schemas. Harvested
+    verbatim to openapi/_original/abcuro-wp-json-routes.json.

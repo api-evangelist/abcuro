@@ -1,0 +1,87 @@
+generated: '2026-08-02'
+method: probed
+source: live probes of abcuro.com + openapi/abcuro-content-openapi.yml
+note: >-
+  Abcuro operates a corporate marketing site, not an API platform. It publishes no versioning
+  policy, no deprecation policy, no SLA, no status page and no API changelog. The findings below
+  are recorded as verified absences, not as gaps to be papered over. No StatusPage or Deprecation
+  pointer is emitted in apis.yml because neither exists.
+
+versioning:
+  scheme: namespace-in-path
+  current: wp/v2
+  policy_url: null
+  policy_published: false
+  note: >-
+    The version segment is inherited from WordPress core, not chosen by Abcuro. wp/v2 has been the
+    stable core namespace since WordPress 4.7 (2016). Plugin namespaces registered on this
+    deployment carry their own versions: oembed/1.0, wp-site-health/v1, wp-block-editor/v1,
+    genesis/v1, yoast/v1, redirection/v1, pum/v1. A plugin being updated or removed can change or
+    withdraw a namespace with no announcement.
+
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  note: >-
+    No Sunset or Deprecation response header was observed on any probe. No operation in
+    openapi/abcuro-content-openapi.yml is marked deprecated. There is no channel through which a
+    breaking change to this surface would be announced.
+  deprecated_operations: []
+
+sla:
+  url: null
+  published: false
+  uptime_target: null
+  note: There is no service-level commitment of any kind. This is an unmetered, unsupported
+    corporate website endpoint.
+
+status_page:
+  url: null
+  published: false
+  probed:
+  - url: https://status.abcuro.com/
+    result: DNS does not resolve
+  - url: https://abcuro.com/status/
+    result: not published
+
+support:
+  channel: email
+  contacts:
+  - purpose: general
+    email: corporate.contact@abcuro.com
+  - purpose: partnering
+    email: partnering@abcuro.com
+  - purpose: investor relations
+    email: IR@abcuro.com
+  page: https://abcuro.com/contact/
+  note: No developer support channel, no forum, no issue tracker, no GitHub organization
+    (github.com/abcuro returns 404).
+
+change_communication:
+  api_changelog: null
+  corporate_news:
+    url: https://abcuro.com/news/
+    feed: https://abcuro.com/feed/
+    api: https://abcuro.com/wp-json/wp/v2/posts
+    note: >-
+      The News feed carries clinical and corporate press releases (28 posts as of 2026-08-02),
+      not API release notes. It is the company's change surface, not the API's, and is wired in
+      apis.yml as Blog/BlogRSS rather than ChangeLog.
+
+stability_assessment:
+  surface: openapi/abcuro-content-openapi.yml
+  read_surface: stable-by-inheritance
+  rationale: >-
+    The wp/v2 core routes (posts, pages, media, categories, tags, users, search, types, taxonomies,
+    statuses) are governed by WordPress core's backward-compatibility policy and are unlikely to
+    break. The four Abcuro-specific custom post types (abcuro_people, abcuro_investors, abcuro_pubs,
+    abcuro_jobs) and the person_role taxonomy are registered by the site's own theme or plugin code;
+    their rest_base names, ACF field sets and even their existence are entirely at Abcuro's
+    discretion and could change with any site redesign without notice.
+  consumer_guidance: >-
+    Treat the four abcuro_* collections as unversioned and unannounced. Re-read
+    https://abcuro.com/wp-json/ before each run and reconcile against the routes index rather than
+    hard-coding paths.
