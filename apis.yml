@@ -33,27 +33,16 @@ tags:
 - content-api
 - wordpress
 apis:
-- name: Abcuro Content API (WordPress REST)
-  description: >-
-    The public, anonymously readable WordPress REST API serving abcuro.com. It exposes the corporate
-    content graph as JSON — press releases (posts), site pages, media assets, categories, and four
-    Abcuro-specific custom post types: abcuro_people (leadership, team, board), abcuro_investors,
-    abcuro_pubs (scientific publications) and abcuro_jobs (careers). Also exposes site-wide search,
-    content types, taxonomies, statuses, and oEmbed. Read operations require no authentication; write
-    operations require WordPress cookie/nonce or application-password authentication and are not
-    available to the public. This is a corporate website content API, not a commercial product API.
+- aid: abcuro:abcuro-careers-api
+  name: Abcuro Careers API
+  description: Job postings.
   humanURL: https://developer.wordpress.org/rest-api/
   baseURL: https://abcuro.com/wp-json/
   tags:
-  - content-api
-  - wordpress
-  - biotechnology
-  - press-releases
-  - publications
-  - clinical-trials
+  - Careers
   properties:
   - type: OpenAPI
-    url: openapi/abcuro-content-openapi.yml
+    url: openapi/abcuro-careers-api-openapi.yml
   - type: Documentation
     url: https://developer.wordpress.org/rest-api/
   - type: APIReference
@@ -66,18 +55,320 @@ apis:
     url: errors/abcuro-problem-types.yml
   - type: DataModel
     url: data-model/abcuro-data-model.yml
-  - type: Overlay
-    url: overlays/abcuro-content-overlay.yaml
   - type: Lifecycle
     url: lifecycle/abcuro-lifecycle.yml
   - type: Conformance
     url: conformance/abcuro-conformance.yml
-  - type: MCPServer
-    url: mcp/abcuro-mcp.yml
   - type: ToolCrosswalk
     url: mcp/abcuro-tool-crosswalk.yml
-  - type: AgentSkill
-    url: skills/_index.yml
+- aid: abcuro:abcuro-comments-api
+  name: Abcuro Comments API
+  description: Comment records.
+  humanURL: https://developer.wordpress.org/rest-api/
+  baseURL: https://abcuro.com/wp-json/
+  tags:
+  - Comments
+  properties:
+  - type: OpenAPI
+    url: openapi/abcuro-comments-api-openapi.yml
+  - type: Documentation
+    url: https://developer.wordpress.org/rest-api/
+  - type: APIReference
+    url: https://developer.wordpress.org/rest-api/reference/
+  - type: Authentication
+    url: authentication/abcuro-authentication.yml
+  - type: Conventions
+    url: conventions/abcuro-conventions.yml
+  - type: ErrorCatalog
+    url: errors/abcuro-problem-types.yml
+  - type: DataModel
+    url: data-model/abcuro-data-model.yml
+  - type: Lifecycle
+    url: lifecycle/abcuro-lifecycle.yml
+  - type: Conformance
+    url: conformance/abcuro-conformance.yml
+  - type: ToolCrosswalk
+    url: mcp/abcuro-tool-crosswalk.yml
+- aid: abcuro:abcuro-discovery-api
+  name: Abcuro Discovery API
+  description: Route, type, taxonomy, status and oEmbed discovery.
+  humanURL: https://developer.wordpress.org/rest-api/
+  baseURL: https://abcuro.com/wp-json/
+  tags:
+  - Discovery
+  properties:
+  - type: OpenAPI
+    url: openapi/abcuro-discovery-api-openapi.yml
+  - type: Documentation
+    url: https://developer.wordpress.org/rest-api/
+  - type: APIReference
+    url: https://developer.wordpress.org/rest-api/reference/
+  - type: Authentication
+    url: authentication/abcuro-authentication.yml
+  - type: Conventions
+    url: conventions/abcuro-conventions.yml
+  - type: ErrorCatalog
+    url: errors/abcuro-problem-types.yml
+  - type: DataModel
+    url: data-model/abcuro-data-model.yml
+  - type: Lifecycle
+    url: lifecycle/abcuro-lifecycle.yml
+  - type: Conformance
+    url: conformance/abcuro-conformance.yml
+  - type: ToolCrosswalk
+    url: mcp/abcuro-tool-crosswalk.yml
+- aid: abcuro:abcuro-investors-api
+  name: Abcuro Investors API
+  description: Investor records.
+  humanURL: https://developer.wordpress.org/rest-api/
+  baseURL: https://abcuro.com/wp-json/
+  tags:
+  - Investors
+  properties:
+  - type: OpenAPI
+    url: openapi/abcuro-investors-api-openapi.yml
+  - type: Documentation
+    url: https://developer.wordpress.org/rest-api/
+  - type: APIReference
+    url: https://developer.wordpress.org/rest-api/reference/
+  - type: Authentication
+    url: authentication/abcuro-authentication.yml
+  - type: Conventions
+    url: conventions/abcuro-conventions.yml
+  - type: ErrorCatalog
+    url: errors/abcuro-problem-types.yml
+  - type: DataModel
+    url: data-model/abcuro-data-model.yml
+  - type: Lifecycle
+    url: lifecycle/abcuro-lifecycle.yml
+  - type: Conformance
+    url: conformance/abcuro-conformance.yml
+  - type: ToolCrosswalk
+    url: mcp/abcuro-tool-crosswalk.yml
+- aid: abcuro:abcuro-media-api
+  name: Abcuro Media API
+  description: Media library assets including clinical presentation PDFs.
+  humanURL: https://developer.wordpress.org/rest-api/
+  baseURL: https://abcuro.com/wp-json/
+  tags:
+  - Media
+  properties:
+  - type: OpenAPI
+    url: openapi/abcuro-media-api-openapi.yml
+  - type: Documentation
+    url: https://developer.wordpress.org/rest-api/
+  - type: APIReference
+    url: https://developer.wordpress.org/rest-api/reference/
+  - type: Authentication
+    url: authentication/abcuro-authentication.yml
+  - type: Conventions
+    url: conventions/abcuro-conventions.yml
+  - type: ErrorCatalog
+    url: errors/abcuro-problem-types.yml
+  - type: DataModel
+    url: data-model/abcuro-data-model.yml
+  - type: Lifecycle
+    url: lifecycle/abcuro-lifecycle.yml
+  - type: Conformance
+    url: conformance/abcuro-conformance.yml
+  - type: ToolCrosswalk
+    url: mcp/abcuro-tool-crosswalk.yml
+- aid: abcuro:abcuro-pages-api
+  name: Abcuro Pages API
+  description: Static site pages.
+  humanURL: https://developer.wordpress.org/rest-api/
+  baseURL: https://abcuro.com/wp-json/
+  tags:
+  - Pages
+  properties:
+  - type: OpenAPI
+    url: openapi/abcuro-pages-api-openapi.yml
+  - type: Documentation
+    url: https://developer.wordpress.org/rest-api/
+  - type: APIReference
+    url: https://developer.wordpress.org/rest-api/reference/
+  - type: Authentication
+    url: authentication/abcuro-authentication.yml
+  - type: Conventions
+    url: conventions/abcuro-conventions.yml
+  - type: ErrorCatalog
+    url: errors/abcuro-problem-types.yml
+  - type: DataModel
+    url: data-model/abcuro-data-model.yml
+  - type: Lifecycle
+    url: lifecycle/abcuro-lifecycle.yml
+  - type: Conformance
+    url: conformance/abcuro-conformance.yml
+  - type: ToolCrosswalk
+    url: mcp/abcuro-tool-crosswalk.yml
+- aid: abcuro:abcuro-people-api
+  name: Abcuro People API
+  description: Leadership, team and board-of-directors records.
+  humanURL: https://developer.wordpress.org/rest-api/
+  baseURL: https://abcuro.com/wp-json/
+  tags:
+  - People
+  properties:
+  - type: OpenAPI
+    url: openapi/abcuro-people-api-openapi.yml
+  - type: Documentation
+    url: https://developer.wordpress.org/rest-api/
+  - type: APIReference
+    url: https://developer.wordpress.org/rest-api/reference/
+  - type: Authentication
+    url: authentication/abcuro-authentication.yml
+  - type: Conventions
+    url: conventions/abcuro-conventions.yml
+  - type: ErrorCatalog
+    url: errors/abcuro-problem-types.yml
+  - type: DataModel
+    url: data-model/abcuro-data-model.yml
+  - type: Lifecycle
+    url: lifecycle/abcuro-lifecycle.yml
+  - type: Conformance
+    url: conformance/abcuro-conformance.yml
+  - type: ToolCrosswalk
+    url: mcp/abcuro-tool-crosswalk.yml
+- aid: abcuro:abcuro-press-releases-api
+  name: Abcuro Press Releases API
+  description: Abcuro corporate and clinical press releases.
+  humanURL: https://developer.wordpress.org/rest-api/
+  baseURL: https://abcuro.com/wp-json/
+  tags:
+  - Press Releases
+  properties:
+  - type: OpenAPI
+    url: openapi/abcuro-press-releases-api-openapi.yml
+  - type: Documentation
+    url: https://developer.wordpress.org/rest-api/
+  - type: APIReference
+    url: https://developer.wordpress.org/rest-api/reference/
+  - type: Authentication
+    url: authentication/abcuro-authentication.yml
+  - type: Conventions
+    url: conventions/abcuro-conventions.yml
+  - type: ErrorCatalog
+    url: errors/abcuro-problem-types.yml
+  - type: DataModel
+    url: data-model/abcuro-data-model.yml
+  - type: Lifecycle
+    url: lifecycle/abcuro-lifecycle.yml
+  - type: Conformance
+    url: conformance/abcuro-conformance.yml
+  - type: ToolCrosswalk
+    url: mcp/abcuro-tool-crosswalk.yml
+- aid: abcuro:abcuro-publications-api
+  name: Abcuro Publications API
+  description: Scientific publications.
+  humanURL: https://developer.wordpress.org/rest-api/
+  baseURL: https://abcuro.com/wp-json/
+  tags:
+  - Publications
+  properties:
+  - type: OpenAPI
+    url: openapi/abcuro-publications-api-openapi.yml
+  - type: Documentation
+    url: https://developer.wordpress.org/rest-api/
+  - type: APIReference
+    url: https://developer.wordpress.org/rest-api/reference/
+  - type: Authentication
+    url: authentication/abcuro-authentication.yml
+  - type: Conventions
+    url: conventions/abcuro-conventions.yml
+  - type: ErrorCatalog
+    url: errors/abcuro-problem-types.yml
+  - type: DataModel
+    url: data-model/abcuro-data-model.yml
+  - type: Lifecycle
+    url: lifecycle/abcuro-lifecycle.yml
+  - type: Conformance
+    url: conformance/abcuro-conformance.yml
+  - type: ToolCrosswalk
+    url: mcp/abcuro-tool-crosswalk.yml
+- aid: abcuro:abcuro-search-api
+  name: Abcuro Search API
+  description: Cross-type site search.
+  humanURL: https://developer.wordpress.org/rest-api/
+  baseURL: https://abcuro.com/wp-json/
+  tags:
+  - Search
+  properties:
+  - type: OpenAPI
+    url: openapi/abcuro-search-api-openapi.yml
+  - type: Documentation
+    url: https://developer.wordpress.org/rest-api/
+  - type: APIReference
+    url: https://developer.wordpress.org/rest-api/reference/
+  - type: Authentication
+    url: authentication/abcuro-authentication.yml
+  - type: Conventions
+    url: conventions/abcuro-conventions.yml
+  - type: ErrorCatalog
+    url: errors/abcuro-problem-types.yml
+  - type: DataModel
+    url: data-model/abcuro-data-model.yml
+  - type: Lifecycle
+    url: lifecycle/abcuro-lifecycle.yml
+  - type: Conformance
+    url: conformance/abcuro-conformance.yml
+  - type: ToolCrosswalk
+    url: mcp/abcuro-tool-crosswalk.yml
+- aid: abcuro:abcuro-taxonomy-api
+  name: Abcuro Taxonomy API
+  description: Categories, tags and the person_role taxonomy.
+  humanURL: https://developer.wordpress.org/rest-api/
+  baseURL: https://abcuro.com/wp-json/
+  tags:
+  - Taxonomy
+  properties:
+  - type: OpenAPI
+    url: openapi/abcuro-taxonomy-api-openapi.yml
+  - type: Documentation
+    url: https://developer.wordpress.org/rest-api/
+  - type: APIReference
+    url: https://developer.wordpress.org/rest-api/reference/
+  - type: Authentication
+    url: authentication/abcuro-authentication.yml
+  - type: Conventions
+    url: conventions/abcuro-conventions.yml
+  - type: ErrorCatalog
+    url: errors/abcuro-problem-types.yml
+  - type: DataModel
+    url: data-model/abcuro-data-model.yml
+  - type: Lifecycle
+    url: lifecycle/abcuro-lifecycle.yml
+  - type: Conformance
+    url: conformance/abcuro-conformance.yml
+  - type: ToolCrosswalk
+    url: mcp/abcuro-tool-crosswalk.yml
+- aid: abcuro:abcuro-users-api
+  name: Abcuro Users API
+  description: Site author accounts.
+  humanURL: https://developer.wordpress.org/rest-api/
+  baseURL: https://abcuro.com/wp-json/
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/abcuro-users-api-openapi.yml
+  - type: Documentation
+    url: https://developer.wordpress.org/rest-api/
+  - type: APIReference
+    url: https://developer.wordpress.org/rest-api/reference/
+  - type: Authentication
+    url: authentication/abcuro-authentication.yml
+  - type: Conventions
+    url: conventions/abcuro-conventions.yml
+  - type: ErrorCatalog
+    url: errors/abcuro-problem-types.yml
+  - type: DataModel
+    url: data-model/abcuro-data-model.yml
+  - type: Lifecycle
+    url: lifecycle/abcuro-lifecycle.yml
+  - type: Conformance
+    url: conformance/abcuro-conformance.yml
+  - type: ToolCrosswalk
+    url: mcp/abcuro-tool-crosswalk.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -109,7 +400,7 @@ common:
 - type: APIReference
   url: https://developer.wordpress.org/rest-api/reference/
 - type: OpenAPI
-  url: openapi/abcuro-content-openapi.yml
+  url: openapi/_original/abcuro-content-openapi.yml
 - type: Authentication
   url: authentication/abcuro-authentication.yml
 - type: Conventions
