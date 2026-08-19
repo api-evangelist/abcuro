@@ -1,0 +1,401 @@
+openapi: 3.2.0
+info:
+  title: Abcuro Content API (WordPress REST) Discovery API
+  version: 2.0.0
+  summary: Public read-only content API behind abcuro.com, the corporate site of clinical-stage biotech Abcuro.
+  description: 'The public, anonymously readable WordPress REST API serving abcuro.com — the corporate site of Abcuro, a clinical-stage biotechnology company developing ulviprubart (ABC008), a KLRG1-targeting monoclonal antibody for inclusion body myositis, T-LGLL and mature T and NK cell lymphomas.
+
+
+    This document was DERIVED by API Evangelist from the live route discovery document at https://abcuro.com/wp-json/ (fetched 2026-08-02) plus observed response shapes. It is not published by Abcuro and is not an official contract. Only the GET surface that answers anonymously is modelled. The live route index also registers POST/PUT/PATCH/DELETE on most collections plus the redirection/v1, yoast/v1, genesis/v1, pum/v1, wp-site-health/v1 and wp-block-editor/v1 plugin namespaces; all of those require WordPress cookie+nonce or application-password authentication and are deliberately not modelled here.
+
+
+    Abcuro publishes no developer portal, no SDKs, no changelog and no product API. This is a corporate website content API, catalogued because it is the only machine-readable surface the company exposes.'
+  contact:
+    name: Abcuro General Inquiries
+    email: corporate.contact@abcuro.com
+    url: https://abcuro.com/contact/
+  license:
+    name: Abcuro Terms of Use
+    url: https://abcuro.com/terms-of-use/
+  x-derived-by: API Evangelist enrichment pipeline
+  x-derived-from: https://abcuro.com/wp-json/
+  x-derived-on: '2026-08-02'
+  x-official: false
+  x-upstream-reference: https://developer.wordpress.org/rest-api/
+servers:
+- url: https://abcuro.com/wp-json
+  description: Production — abcuro.com WordPress REST API
+security:
+- {}
+tags:
+- name: Discovery
+  description: Route, type, taxonomy, status and oEmbed discovery.
+paths:
+  /wp/v2/types:
+    get:
+      operationId: listTypes
+      summary: List content types
+      description: List every registered content type on the site, including the four Abcuro custom post types.
+      tags:
+      - Discovery
+      security:
+      - {}
+      parameters:
+      - name: context
+        in: query
+        required: false
+        description: Scope under which the request is made; determines fields present in response.
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+      - name: _fields
+        in: query
+        required: false
+        description: Comma-separated list of fields to include in the response (sparse fieldsets).
+        schema:
+          type: string
+      - name: _embed
+        in: query
+        required: false
+        description: Embed linked resources (author, featured media, terms) inline under _embedded.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List content types.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter (rest_invalid_param).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authentication required or insufficient permission (rest_forbidden).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden — cookie nonce invalid or capability missing (rest_cookie_invalid_nonce).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: No resource exists with that identifier (rest_post_invalid_id / rest_term_invalid / rest_no_route).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /wp/v2/taxonomies:
+    get:
+      operationId: listTaxonomies
+      summary: List taxonomies
+      description: List every registered taxonomy, including person_role.
+      tags:
+      - Discovery
+      security:
+      - {}
+      parameters:
+      - name: context
+        in: query
+        required: false
+        description: Scope under which the request is made; determines fields present in response.
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+      - name: type
+        in: query
+        required: false
+        description: Limit results to taxonomies associated with a specific post type.
+        schema:
+          type: string
+      - name: _fields
+        in: query
+        required: false
+        description: Comma-separated list of fields to include in the response (sparse fieldsets).
+        schema:
+          type: string
+      - name: _embed
+        in: query
+        required: false
+        description: Embed linked resources (author, featured media, terms) inline under _embedded.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List taxonomies.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter (rest_invalid_param).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authentication required or insufficient permission (rest_forbidden).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden — cookie nonce invalid or capability missing (rest_cookie_invalid_nonce).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: No resource exists with that identifier (rest_post_invalid_id / rest_term_invalid / rest_no_route).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /wp/v2/statuses:
+    get:
+      operationId: listStatuses
+      summary: List post statuses
+      description: List the post statuses available on the site.
+      tags:
+      - Discovery
+      security:
+      - {}
+      parameters:
+      - name: context
+        in: query
+        required: false
+        description: Scope under which the request is made; determines fields present in response.
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+      - name: _fields
+        in: query
+        required: false
+        description: Comma-separated list of fields to include in the response (sparse fieldsets).
+        schema:
+          type: string
+      - name: _embed
+        in: query
+        required: false
+        description: Embed linked resources (author, featured media, terms) inline under _embedded.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List post statuses.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter (rest_invalid_param).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authentication required or insufficient permission (rest_forbidden).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden — cookie nonce invalid or capability missing (rest_cookie_invalid_nonce).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: No resource exists with that identifier (rest_post_invalid_id / rest_term_invalid / rest_no_route).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /:
+    get:
+      operationId: getRoot
+      summary: Get API root discovery document
+      description: 'Return the API root: site name, description, URL, registered namespaces, authentication schemes, and the full route index with per-route arguments.'
+      tags:
+      - Discovery
+      security:
+      - {}
+      parameters:
+      - name: context
+        in: query
+        required: false
+        description: The context query parameter.
+        schema:
+          default: view
+      - name: _fields
+        in: query
+        required: false
+        description: Comma-separated list of fields to include in the response (sparse fieldsets).
+        schema:
+          type: string
+      - name: _embed
+        in: query
+        required: false
+        description: Embed linked resources (author, featured media, terms) inline under _embedded.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Get API root discovery document.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter (rest_invalid_param).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authentication required or insufficient permission (rest_forbidden).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden — cookie nonce invalid or capability missing (rest_cookie_invalid_nonce).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: No resource exists with that identifier (rest_post_invalid_id / rest_term_invalid / rest_no_route).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /oembed/1.0/embed:
+    get:
+      operationId: getOembed
+      summary: Get the oEmbed representation of a URL
+      description: Return the oEmbed 1.0 representation for an abcuro.com URL.
+      tags:
+      - Discovery
+      security:
+      - {}
+      parameters:
+      - name: url
+        in: query
+        required: true
+        description: The URL of the resource for which to fetch oEmbed data.
+        schema:
+          type: string
+          format: uri
+      - name: format
+        in: query
+        required: false
+        description: The format query parameter.
+        schema:
+          default: json
+      - name: maxwidth
+        in: query
+        required: false
+        description: The maxwidth query parameter.
+        schema:
+          default: 600
+      - name: _fields
+        in: query
+        required: false
+        description: Comma-separated list of fields to include in the response (sparse fieldsets).
+        schema:
+          type: string
+      - name: _embed
+        in: query
+        required: false
+        description: Embed linked resources (author, featured media, terms) inline under _embedded.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Get the oEmbed representation of a URL.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter (rest_invalid_param).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authentication required or insufficient permission (rest_forbidden).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden — cookie nonce invalid or capability missing (rest_cookie_invalid_nonce).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: No resource exists with that identifier (rest_post_invalid_id / rest_term_invalid / rest_no_route).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Error:
+      type: object
+      description: The WordPress REST API error envelope. This is NOT RFC 9457 problem+json — errors are returned as application/json with a machine-readable string code.
+      required:
+      - code
+      - message
+      - data
+      properties:
+        code:
+          type: string
+          description: Machine-readable error code, e.g. rest_forbidden, rest_no_route, rest_invalid_param.
+        message:
+          type: string
+          description: Human-readable error message.
+        data:
+          type: object
+          description: Structured error data.
+          properties:
+            status:
+              type: integer
+              description: The HTTP status code.
+            params:
+              type: object
+              description: Per-parameter validation messages (rest_invalid_param only).
+            details:
+              type: object
+              description: Per-parameter validation details (rest_invalid_param only).
+  securitySchemes:
+    applicationPassword:
+      type: http
+      scheme: basic
+      description: WordPress application passwords (RFC 7617 Basic over TLS). The live route index advertises the authorization endpoint at https://abcuro.com/wp-admin/authorize-application.php. Required for every write operation and for the edit context; not available to the public.
+    cookieNonce:
+      type: apiKey
+      in: header
+      name: X-WP-Nonce
+      description: WordPress cookie authentication paired with an X-WP-Nonce header; used by the site's own admin and block-editor UI.

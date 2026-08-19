@@ -1,0 +1,50 @@
+{
+  "provider": "abcuro",
+  "sources": [
+    "abcuro-careers-api-openapi.yml",
+    "abcuro-comments-api-openapi.yml",
+    "abcuro-discovery-api-openapi.yml",
+    "abcuro-investors-api-openapi.yml",
+    "abcuro-media-api-openapi.yml",
+    "abcuro-pages-api-openapi.yml",
+    "abcuro-people-api-openapi.yml",
+    "abcuro-press-releases-api-openapi.yml",
+    "abcuro-publications-api-openapi.yml",
+    "abcuro-search-api-openapi.yml",
+    "abcuro-taxonomy-api-openapi.yml",
+    "abcuro-users-api-openapi.yml"
+  ],
+  "outputs": [
+    "abcuro-careers-api-openapi.yml",
+    "abcuro-comments-api-openapi.yml",
+    "abcuro-discovery-api-openapi.yml",
+    "abcuro-investors-api-openapi.yml",
+    "abcuro-media-api-openapi.yml",
+    "abcuro-pages-api-openapi.yml",
+    "abcuro-people-api-openapi.yml",
+    "abcuro-press-releases-api-openapi.yml",
+    "abcuro-publications-api-openapi.yml",
+    "abcuro-search-api-openapi.yml",
+    "abcuro-taxonomy-api-openapi.yml",
+    "abcuro-users-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "abcuro-careers-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "abcuro-comments-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "abcuro-discovery-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "abcuro-investors-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "abcuro-media-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "abcuro-pages-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "abcuro-people-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "abcuro-press-releases-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "abcuro-publications-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "abcuro-search-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "abcuro-taxonomy-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "abcuro-users-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": []
+}

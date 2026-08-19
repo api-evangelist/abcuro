@@ -11,7 +11,8 @@ note: >-
 surfaces:
   openapi:
     file: openapi/abcuro-content-openapi.yml
-    status: derived-by-api-evangelist
+    status: candidate
+    status_raw: derived-by-api-evangelist
     gated: false
     operations: 30
     note: >-

@@ -1,0 +1,191 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Abcuro Content API (WordPress REST) Discovery API",
+    "version": "2.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Discovery",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List content types",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://abcuro.com/wp-json/wp/v2/types",
+            "params": [
+              {
+                "name": "context",
+                "value": "",
+                "type": "query",
+                "description": "Scope under which the request is made; determines fields present in response."
+              },
+              {
+                "name": "_fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of fields to include in the response (sparse fieldsets)."
+              },
+              {
+                "name": "_embed",
+                "value": "",
+                "type": "query",
+                "description": "Embed linked resources (author, featured media, terms) inline under _embedded."
+              }
+            ]
+          },
+          "docs": "List every registered content type on the site, including the four Abcuro custom post types."
+        },
+        {
+          "info": {
+            "name": "List taxonomies",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://abcuro.com/wp-json/wp/v2/taxonomies",
+            "params": [
+              {
+                "name": "context",
+                "value": "",
+                "type": "query",
+                "description": "Scope under which the request is made; determines fields present in response."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Limit results to taxonomies associated with a specific post type."
+              },
+              {
+                "name": "_fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of fields to include in the response (sparse fieldsets)."
+              },
+              {
+                "name": "_embed",
+                "value": "",
+                "type": "query",
+                "description": "Embed linked resources (author, featured media, terms) inline under _embedded."
+              }
+            ]
+          },
+          "docs": "List every registered taxonomy, including person_role."
+        },
+        {
+          "info": {
+            "name": "List post statuses",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://abcuro.com/wp-json/wp/v2/statuses",
+            "params": [
+              {
+                "name": "context",
+                "value": "",
+                "type": "query",
+                "description": "Scope under which the request is made; determines fields present in response."
+              },
+              {
+                "name": "_fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of fields to include in the response (sparse fieldsets)."
+              },
+              {
+                "name": "_embed",
+                "value": "",
+                "type": "query",
+                "description": "Embed linked resources (author, featured media, terms) inline under _embedded."
+              }
+            ]
+          },
+          "docs": "List the post statuses available on the site."
+        },
+        {
+          "info": {
+            "name": "Get API root discovery document",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://abcuro.com/wp-json/",
+            "params": [
+              {
+                "name": "context",
+                "value": "",
+                "type": "query",
+                "description": "The context query parameter."
+              },
+              {
+                "name": "_fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of fields to include in the response (sparse fieldsets)."
+              },
+              {
+                "name": "_embed",
+                "value": "",
+                "type": "query",
+                "description": "Embed linked resources (author, featured media, terms) inline under _embedded."
+              }
+            ]
+          },
+          "docs": "Return the API root: site name, description, URL, registered namespaces, authentication schemes, and the full route index with per-route arguments."
+        },
+        {
+          "info": {
+            "name": "Get the oEmbed representation of a URL",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://abcuro.com/wp-json/oembed/1.0/embed",
+            "params": [
+              {
+                "name": "url",
+                "value": "",
+                "type": "query",
+                "description": "The URL of the resource for which to fetch oEmbed data."
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "The format query parameter."
+              },
+              {
+                "name": "maxwidth",
+                "value": "",
+                "type": "query",
+                "description": "The maxwidth query parameter."
+              },
+              {
+                "name": "_fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of fields to include in the response (sparse fieldsets)."
+              },
+              {
+                "name": "_embed",
+                "value": "",
+                "type": "query",
+                "description": "Embed linked resources (author, featured media, terms) inline under _embedded."
+              }
+            ]
+          },
+          "docs": "Return the oEmbed 1.0 representation for an abcuro.com URL."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

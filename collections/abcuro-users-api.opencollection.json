@@ -1,0 +1,164 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Abcuro Content API (WordPress REST) Users API",
+    "version": "2.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Users",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List users",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://abcuro.com/wp-json/wp/v2/users",
+            "params": [
+              {
+                "name": "context",
+                "value": "",
+                "type": "query",
+                "description": "Scope under which the request is made; determines fields present in response."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Current page of the collection."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of items to be returned in result set."
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Limit results to those matching a string."
+              },
+              {
+                "name": "exclude",
+                "value": "",
+                "type": "query",
+                "description": "Ensure result set excludes specific IDs."
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Limit result set to specific IDs."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Offset the result set by a specific number of items."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Order sort attribute ascending or descending."
+              },
+              {
+                "name": "orderby",
+                "value": "",
+                "type": "query",
+                "description": "Sort collection by user attribute."
+              },
+              {
+                "name": "slug",
+                "value": "",
+                "type": "query",
+                "description": "Limit result set to users with one or more specific slugs."
+              },
+              {
+                "name": "roles",
+                "value": "",
+                "type": "query",
+                "description": "Limit result set to users matching at least one specific role provided. Accepts csv list or single role."
+              },
+              {
+                "name": "capabilities",
+                "value": "",
+                "type": "query",
+                "description": "Limit result set to users matching at least one specific capability provided. Accepts csv list or single capability."
+              },
+              {
+                "name": "who",
+                "value": "",
+                "type": "query",
+                "description": "Limit result set to users who are considered authors."
+              },
+              {
+                "name": "has_published_posts",
+                "value": "",
+                "type": "query",
+                "description": "Limit result set to users who have published posts."
+              },
+              {
+                "name": "_fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of fields to include in the response (sparse fieldsets)."
+              },
+              {
+                "name": "_embed",
+                "value": "",
+                "type": "query",
+                "description": "Embed linked resources (author, featured media, terms) inline under _embedded."
+              }
+            ]
+          },
+          "docs": "Site author accounts. NOTE: this collection answers anonymously, which enumerates author names and slugs."
+        },
+        {
+          "info": {
+            "name": "Get a single user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://abcuro.com/wp-json/wp/v2/users/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique numeric identifier for the user."
+              },
+              {
+                "name": "context",
+                "value": "",
+                "type": "query",
+                "description": "Scope under which the request is made; determines fields present in response."
+              },
+              {
+                "name": "_fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of fields to include in the response (sparse fieldsets)."
+              },
+              {
+                "name": "_embed",
+                "value": "",
+                "type": "query",
+                "description": "Embed linked resources (author, featured media, terms) inline under _embedded."
+              }
+            ]
+          },
+          "docs": "Retrieve one user record by its numeric identifier."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,590 @@
+openapi: 3.2.0
+info:
+  title: Abcuro Content API (WordPress REST) Press Releases API
+  version: 2.0.0
+  summary: Public read-only content API behind abcuro.com, the corporate site of clinical-stage biotech Abcuro.
+  description: 'The public, anonymously readable WordPress REST API serving abcuro.com — the corporate site of Abcuro, a clinical-stage biotechnology company developing ulviprubart (ABC008), a KLRG1-targeting monoclonal antibody for inclusion body myositis, T-LGLL and mature T and NK cell lymphomas.
+
+
+    This document was DERIVED by API Evangelist from the live route discovery document at https://abcuro.com/wp-json/ (fetched 2026-08-02) plus observed response shapes. It is not published by Abcuro and is not an official contract. Only the GET surface that answers anonymously is modelled. The live route index also registers POST/PUT/PATCH/DELETE on most collections plus the redirection/v1, yoast/v1, genesis/v1, pum/v1, wp-site-health/v1 and wp-block-editor/v1 plugin namespaces; all of those require WordPress cookie+nonce or application-password authentication and are deliberately not modelled here.
+
+
+    Abcuro publishes no developer portal, no SDKs, no changelog and no product API. This is a corporate website content API, catalogued because it is the only machine-readable surface the company exposes.'
+  contact:
+    name: Abcuro General Inquiries
+    email: corporate.contact@abcuro.com
+    url: https://abcuro.com/contact/
+  license:
+    name: Abcuro Terms of Use
+    url: https://abcuro.com/terms-of-use/
+  x-derived-by: API Evangelist enrichment pipeline
+  x-derived-from: https://abcuro.com/wp-json/
+  x-derived-on: '2026-08-02'
+  x-official: false
+  x-upstream-reference: https://developer.wordpress.org/rest-api/
+servers:
+- url: https://abcuro.com/wp-json
+  description: Production — abcuro.com WordPress REST API
+security:
+- {}
+tags:
+- name: Press Releases
+  description: Abcuro corporate and clinical press releases.
+paths:
+  /wp/v2/posts:
+    get:
+      operationId: listPosts
+      summary: List posts
+      description: Press releases published by Abcuro. The site uses the WordPress core post type for its News feed.
+      tags:
+      - Press Releases
+      security:
+      - {}
+      parameters:
+      - name: context
+        in: query
+        required: false
+        description: Scope under which the request is made; determines fields present in response.
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+      - name: page
+        in: query
+        required: false
+        description: Current page of the collection.
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+      - name: per_page
+        in: query
+        required: false
+        description: Maximum number of items to be returned in result set.
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 100
+      - name: search
+        in: query
+        required: false
+        description: Limit results to those matching a string.
+        schema:
+          type: string
+      - name: after
+        in: query
+        required: false
+        description: Limit response to posts published after a given ISO8601 compliant date.
+        schema:
+          type: string
+          format: date-time
+      - name: modified_after
+        in: query
+        required: false
+        description: Limit response to posts modified after a given ISO8601 compliant date.
+        schema:
+          type: string
+          format: date-time
+      - name: author
+        in: query
+        required: false
+        description: Limit result set to posts assigned to specific authors.
+        schema:
+          type: array
+          default: []
+          items:
+            type: integer
+      - name: author_exclude
+        in: query
+        required: false
+        description: Ensure result set excludes posts assigned to specific authors.
+        schema:
+          type: array
+          default: []
+          items:
+            type: integer
+      - name: before
+        in: query
+        required: false
+        description: Limit response to posts published before a given ISO8601 compliant date.
+        schema:
+          type: string
+          format: date-time
+      - name: modified_before
+        in: query
+        required: false
+        description: Limit response to posts modified before a given ISO8601 compliant date.
+        schema:
+          type: string
+          format: date-time
+      - name: exclude
+        in: query
+        required: false
+        description: Ensure result set excludes specific IDs.
+        schema:
+          type: array
+          default: []
+          items:
+            type: integer
+      - name: include
+        in: query
+        required: false
+        description: Limit result set to specific IDs.
+        schema:
+          type: array
+          default: []
+          items:
+            type: integer
+      - name: offset
+        in: query
+        required: false
+        description: Offset the result set by a specific number of items.
+        schema:
+          type: integer
+      - name: order
+        in: query
+        required: false
+        description: Order sort attribute ascending or descending.
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: desc
+      - name: orderby
+        in: query
+        required: false
+        description: Sort collection by post attribute.
+        schema:
+          type: string
+          enum:
+          - author
+          - date
+          - id
+          - include
+          - modified
+          - parent
+          - relevance
+          - slug
+          - include_slugs
+          - title
+          - menu_order
+          default: date
+      - name: slug
+        in: query
+        required: false
+        description: Limit result set to posts with one or more specific slugs.
+        schema:
+          type: array
+          items:
+            type: string
+      - name: status
+        in: query
+        required: false
+        description: Limit result set to posts assigned one or more statuses.
+        schema:
+          type: array
+          default: publish
+          items:
+            enum:
+            - publish
+            - future
+            - draft
+            - pending
+            - private
+            - trash
+            - auto-draft
+            - inherit
+            - request-pending
+            - request-confirmed
+            - request-failed
+            - request-completed
+            - acf-disabled
+            - dp-rewrite-republish
+            - any
+            type: string
+      - name: tax_relation
+        in: query
+        required: false
+        description: Limit result set based on relationship between multiple taxonomies.
+        schema:
+          type: string
+          enum:
+          - AND
+          - OR
+      - name: categories
+        in: query
+        required: false
+        description: Limit result set to items with specific terms assigned in the categories taxonomy.
+        schema:
+          type: object
+      - name: categories_exclude
+        in: query
+        required: false
+        description: Limit result set to items except those with specific terms assigned in the categories taxonomy.
+        schema:
+          type: object
+      - name: tags
+        in: query
+        required: false
+        description: Limit result set to items with specific terms assigned in the tags taxonomy.
+        schema:
+          type: object
+      - name: tags_exclude
+        in: query
+        required: false
+        description: Limit result set to items except those with specific terms assigned in the tags taxonomy.
+        schema:
+          type: object
+      - name: sticky
+        in: query
+        required: false
+        description: Limit result set to items that are sticky.
+        schema:
+          type: boolean
+      - name: _fields
+        in: query
+        required: false
+        description: Comma-separated list of fields to include in the response (sparse fieldsets).
+        schema:
+          type: string
+      - name: _embed
+        in: query
+        required: false
+        description: Embed linked resources (author, featured media, terms) inline under _embedded.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A paginated collection of press release records.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+          headers:
+            X-WP-Total:
+              description: Total number of items in the collection.
+              schema:
+                type: integer
+            X-WP-TotalPages:
+              description: Total number of pages available.
+              schema:
+                type: integer
+            Link:
+              description: RFC 8288 pagination links (rel="next" / rel="prev").
+              schema:
+                type: string
+        '400':
+          description: Invalid parameter (rest_invalid_param).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authentication required or insufficient permission (rest_forbidden).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden — cookie nonce invalid or capability missing (rest_cookie_invalid_nonce).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /wp/v2/posts/{id}:
+    get:
+      operationId: getPost
+      summary: Get a single press release
+      description: Retrieve one press release record by its numeric identifier.
+      tags:
+      - Press Releases
+      security:
+      - {}
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Unique numeric identifier for the press release.
+        schema:
+          type: integer
+      - name: context
+        in: query
+        required: false
+        description: Scope under which the request is made; determines fields present in response.
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+      - name: password
+        in: query
+        required: false
+        description: The password for the post if it is password protected.
+        schema:
+          type: string
+      - name: _fields
+        in: query
+        required: false
+        description: Comma-separated list of fields to include in the response (sparse fieldsets).
+        schema:
+          type: string
+      - name: _embed
+        in: query
+        required: false
+        description: Embed linked resources (author, featured media, terms) inline under _embedded.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The requested press release record.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '400':
+          description: Invalid parameter (rest_invalid_param).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authentication required or insufficient permission (rest_forbidden).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden — cookie nonce invalid or capability missing (rest_cookie_invalid_nonce).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: No resource exists with that identifier (rest_post_invalid_id / rest_term_invalid / rest_no_route).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Error:
+      type: object
+      description: The WordPress REST API error envelope. This is NOT RFC 9457 problem+json — errors are returned as application/json with a machine-readable string code.
+      required:
+      - code
+      - message
+      - data
+      properties:
+        code:
+          type: string
+          description: Machine-readable error code, e.g. rest_forbidden, rest_no_route, rest_invalid_param.
+        message:
+          type: string
+          description: Human-readable error message.
+        data:
+          type: object
+          description: Structured error data.
+          properties:
+            status:
+              type: integer
+              description: The HTTP status code.
+            params:
+              type: object
+              description: Per-parameter validation messages (rest_invalid_param only).
+            details:
+              type: object
+              description: Per-parameter validation details (rest_invalid_param only).
+    Post:
+      type: object
+      properties:
+        id:
+          type: integer
+        date:
+          type: string
+        date_gmt:
+          type: string
+        guid:
+          type: object
+          properties:
+            rendered:
+              type: string
+        modified:
+          type: string
+        modified_gmt:
+          type: string
+        slug:
+          type: string
+        status:
+          type: string
+        type:
+          type: string
+        link:
+          type: string
+        title:
+          type: object
+          properties:
+            rendered:
+              type: string
+        content:
+          type: object
+          properties:
+            rendered:
+              type: string
+            protected:
+              type: boolean
+        excerpt:
+          type: object
+          properties:
+            rendered:
+              type: string
+            protected:
+              type: boolean
+        author:
+          type: integer
+        featured_media:
+          type: integer
+        comment_status:
+          type: string
+        ping_status:
+          type: string
+        sticky:
+          type: boolean
+        template:
+          type: string
+        format:
+          type: string
+        meta:
+          type: object
+          properties:
+            _genesis_hide_title:
+              type: boolean
+            _genesis_hide_breadcrumbs:
+              type: boolean
+            _genesis_hide_singular_image:
+              type: boolean
+            _genesis_hide_footer_widgets:
+              type: boolean
+            _genesis_custom_body_class:
+              type: string
+            _genesis_custom_post_class:
+              type: string
+            _genesis_layout:
+              type: string
+        categories:
+          type: array
+          items:
+            type: integer
+        tags:
+          type: array
+          items: {}
+        yoast_head:
+          type: string
+        yoast_head_json:
+          type: object
+          properties:
+            title:
+              type: string
+            robots:
+              type: object
+              properties:
+                index:
+                  type: string
+                follow:
+                  type: string
+                max-snippet:
+                  type: string
+                max-image-preview:
+                  type: string
+                max-video-preview:
+                  type: string
+            canonical:
+              type: string
+            og_locale:
+              type: string
+            og_type:
+              type: string
+            og_title:
+              type: string
+            og_description:
+              type: string
+            og_url:
+              type: string
+            og_site_name:
+              type: string
+            article_published_time:
+              type: string
+            article_modified_time:
+              type: string
+            twitter_card:
+              type: string
+            twitter_misc:
+              type: object
+              properties:
+                Written by:
+                  type: string
+                Est. reading time:
+                  type: string
+            schema:
+              type: object
+              properties:
+                '@context':
+                  type: string
+                '@graph':
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      '@type':
+                        type: string
+                      '@id':
+                        type: string
+                      url:
+                        type: string
+                      name:
+                        type: string
+                      description:
+                        type: string
+                      potentialAction:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            '@type':
+                              type: string
+                            target:
+                              type: object
+                              properties:
+                                '@type':
+                                  type: string
+                                urlTemplate:
+                                  type: string
+                            query-input:
+                              type: string
+                      inLanguage:
+                        type: string
+        acf:
+          type: array
+          items: {}
+        _links:
+          type: object
+          description: HAL-style link relations for this resource (self, collection, about, author, wp:term, curies).
+      description: A press release record as returned by the Abcuro WordPress REST API. Field set derived from live responses fetched 2026-08-02.
+  securitySchemes:
+    applicationPassword:
+      type: http
+      scheme: basic
+      description: WordPress application passwords (RFC 7617 Basic over TLS). The live route index advertises the authorization endpoint at https://abcuro.com/wp-admin/authorize-application.php. Required for every write operation and for the edit context; not available to the public.
+    cookieNonce:
+      type: apiKey
+      in: header
+      name: X-WP-Nonce
+      description: WordPress cookie authentication paired with an X-WP-Nonce header; used by the site's own admin and block-editor UI.
