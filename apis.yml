@@ -21,6 +21,18 @@ specificationVersion: '0.23'
 created: '2026-08-02'
 modified: '2026-08-02'
 tags:
+- Biotechnology
+- Pharmaceuticals
+- Immunology
+- Autoimmune Disease
+- Oncology
+- Clinical Trials
+- Life Sciences
+- Drug Development
+- Healthcare
+- content-api
+- WordPress
+tags_raw:
 - biotechnology
 - pharmaceuticals
 - immunology
@@ -347,6 +359,8 @@ apis:
   humanURL: https://developer.wordpress.org/rest-api/
   baseURL: https://abcuro.com/wp-json/
   tags:
+  - User
+  tags_raw:
   - Users
   properties:
   - type: OpenAPI
