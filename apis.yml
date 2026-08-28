@@ -11,6 +11,18 @@ description: >-
   the corporate content graph — press releases, pipeline and science pages, scientific publications,
   leadership and board people records, investor records, and media assets — and is catalogued here as a
   read-only content API rather than a product API.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://abcuro.com/wp-content/uploads/Abcuro_logo.png
 url: https://raw.githubusercontent.com/api-evangelist/abcuro/refs/heads/main/apis.yml
 x-type: company
