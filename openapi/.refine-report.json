@@ -32,18 +32,6 @@
   "errors": [],
   "warnings": [],
   "notes": [
-    "abcuro-careers-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "abcuro-comments-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "abcuro-discovery-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "abcuro-investors-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "abcuro-media-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "abcuro-pages-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "abcuro-people-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "abcuro-press-releases-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "abcuro-publications-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "abcuro-search-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "abcuro-taxonomy-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "abcuro-users-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
     "apis.yml register: already-registered"
   ],
   "skipped": []

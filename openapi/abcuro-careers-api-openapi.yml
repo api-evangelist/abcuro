@@ -319,6 +319,10 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    Job:
+      type: object
+      additionalProperties: true
+      description: A job record. The collection answered 200 with an empty array, so no live response was available to derive a field set from; see the WordPress REST API reference for the object shape.
     Error:
       type: object
       description: The WordPress REST API error envelope. This is NOT RFC 9457 problem+json — errors are returned as application/json with a machine-readable string code.
@@ -346,10 +350,6 @@ components:
             details:
               type: object
               description: Per-parameter validation details (rest_invalid_param only).
-    Job:
-      type: object
-      additionalProperties: true
-      description: A job record. The collection answered 200 with an empty array, so no live response was available to derive a field set from; see the WordPress REST API reference for the object shape.
   securitySchemes:
     applicationPassword:
       type: http

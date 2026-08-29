@@ -362,6 +362,33 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    Error:
+      type: object
+      description: The WordPress REST API error envelope. This is NOT RFC 9457 problem+json — errors are returned as application/json with a machine-readable string code.
+      required:
+      - code
+      - message
+      - data
+      properties:
+        code:
+          type: string
+          description: Machine-readable error code, e.g. rest_forbidden, rest_no_route, rest_invalid_param.
+        message:
+          type: string
+          description: Human-readable error message.
+        data:
+          type: object
+          description: Structured error data.
+          properties:
+            status:
+              type: integer
+              description: The HTTP status code.
+            params:
+              type: object
+              description: Per-parameter validation messages (rest_invalid_param only).
+            details:
+              type: object
+              description: Per-parameter validation details (rest_invalid_param only).
     Page:
       type: object
       properties:
@@ -526,33 +553,6 @@ components:
           type: object
           description: HAL-style link relations for this resource (self, collection, about, author, wp:term, curies).
       description: A page record as returned by the Abcuro WordPress REST API. Field set derived from live responses fetched 2026-08-02.
-    Error:
-      type: object
-      description: The WordPress REST API error envelope. This is NOT RFC 9457 problem+json — errors are returned as application/json with a machine-readable string code.
-      required:
-      - code
-      - message
-      - data
-      properties:
-        code:
-          type: string
-          description: Machine-readable error code, e.g. rest_forbidden, rest_no_route, rest_invalid_param.
-        message:
-          type: string
-          description: Human-readable error message.
-        data:
-          type: object
-          description: Structured error data.
-          properties:
-            status:
-              type: integer
-              description: The HTTP status code.
-            params:
-              type: object
-              description: Per-parameter validation messages (rest_invalid_param only).
-            details:
-              type: object
-              description: Per-parameter validation details (rest_invalid_param only).
   securitySchemes:
     applicationPassword:
       type: http
