@@ -33,17 +33,17 @@ specificationVersion: '0.23'
 created: '2026-08-02'
 modified: '2026-08-02'
 tags:
-- biotechnology
-- pharmaceuticals
-- immunology
-- autoimmune-disease
-- oncology
-- clinical-trials
-- life-sciences
-- drug-development
-- healthcare
+- Biotechnology
+- Pharmaceuticals
+- Immunology
+- Autoimmune Disease
+- Oncology
+- Clinical Trials
+- Life Sciences
+- Drug Development
+- Healthcare
 - content-api
-- wordpress
+- WordPress
 tags_raw:
 - biotechnology
 - pharmaceuticals
