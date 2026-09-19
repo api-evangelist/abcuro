@@ -160,6 +160,8 @@ apis:
   humanURL: https://developer.wordpress.org/rest-api/
   baseURL: https://abcuro.com/wp-json/
   tags:
+  - Investor
+  tags_raw:
   - Investors
   properties:
   - type: OpenAPI
