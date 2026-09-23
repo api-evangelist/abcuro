@@ -1,18 +1,7 @@
 {
   "provider": "abcuro",
   "sources": [
-    "abcuro-careers-api-openapi.yml",
-    "abcuro-comments-api-openapi.yml",
-    "abcuro-discovery-api-openapi.yml",
-    "abcuro-investors-api-openapi.yml",
-    "abcuro-media-api-openapi.yml",
-    "abcuro-pages-api-openapi.yml",
-    "abcuro-people-api-openapi.yml",
-    "abcuro-press-releases-api-openapi.yml",
-    "abcuro-publications-api-openapi.yml",
-    "abcuro-search-api-openapi.yml",
-    "abcuro-taxonomy-api-openapi.yml",
-    "abcuro-users-api-openapi.yml"
+    "_ae-authored/abcuro-content-openapi.yml"
   ],
   "outputs": [
     "abcuro-careers-api-openapi.yml",
@@ -32,7 +21,22 @@
   "errors": [],
   "warnings": [],
   "notes": [
+    "sourced from openapi/_original/ (0 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "abcuro-content-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
     "apis.yml register: already-registered"
   ],
-  "skipped": []
+  "skipped": [
+    "abcuro-careers-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "abcuro-comments-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "abcuro-discovery-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "abcuro-investors-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "abcuro-media-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "abcuro-pages-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "abcuro-people-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "abcuro-press-releases-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "abcuro-publications-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "abcuro-search-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "abcuro-taxonomy-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "abcuro-users-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

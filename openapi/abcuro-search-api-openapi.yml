@@ -3,13 +3,7 @@ info:
   title: Abcuro Content API (WordPress REST) Search API
   version: 2.0.0
   summary: Public read-only content API behind abcuro.com, the corporate site of clinical-stage biotech Abcuro.
-  description: 'The public, anonymously readable WordPress REST API serving abcuro.com — the corporate site of Abcuro, a clinical-stage biotechnology company developing ulviprubart (ABC008), a KLRG1-targeting monoclonal antibody for inclusion body myositis, T-LGLL and mature T and NK cell lymphomas.
-
-
-    This document was DERIVED by API Evangelist from the live route discovery document at https://abcuro.com/wp-json/ (fetched 2026-08-02) plus observed response shapes. It is not published by Abcuro and is not an official contract. Only the GET surface that answers anonymously is modelled. The live route index also registers POST/PUT/PATCH/DELETE on most collections plus the redirection/v1, yoast/v1, genesis/v1, pum/v1, wp-site-health/v1 and wp-block-editor/v1 plugin namespaces; all of those require WordPress cookie+nonce or application-password authentication and are deliberately not modelled here.
-
-
-    Abcuro publishes no developer portal, no SDKs, no changelog and no product API. This is a corporate website content API, catalogued because it is the only machine-readable surface the company exposes.'
+  description: The public, anonymously readable WordPress REST API serving abcuro.com — the corporate site of Abcuro, a clinical-stage biotechnology company developing ulviprubart (ABC008), a KLRG1-targeting monoclonal antibody for inclusion body myositis, T-LGLL and mature T and NK cell lymphomas.
   contact:
     name: Abcuro General Inquiries
     email: corporate.contact@abcuro.com
@@ -159,6 +153,23 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    SearchResult:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        url:
+          type: string
+        type:
+          type: string
+        subtype:
+          type: string
+        _links:
+          type: object
+          description: HAL-style link relations for this resource (self, collection, about, author, wp:term, curies).
+      description: A search result row. Field set derived from live responses fetched 2026-08-02.
     Error:
       type: object
       description: The WordPress REST API error envelope. This is NOT RFC 9457 problem+json — errors are returned as application/json with a machine-readable string code.
@@ -186,23 +197,6 @@ components:
             details:
               type: object
               description: Per-parameter validation details (rest_invalid_param only).
-    SearchResult:
-      type: object
-      properties:
-        id:
-          type: integer
-        title:
-          type: string
-        url:
-          type: string
-        type:
-          type: string
-        subtype:
-          type: string
-        _links:
-          type: object
-          description: HAL-style link relations for this resource (self, collection, about, author, wp:term, curies).
-      description: A search result row. Field set derived from live responses fetched 2026-08-02.
   securitySchemes:
     applicationPassword:
       type: http

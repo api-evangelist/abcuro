@@ -2,7 +2,7 @@ overlay: 1.0.0
 info:
   title: API Evangelist enhancements for the Abcuro Content API
   version: 1.0.0
-  description: >-
+  x-description: >-
     Captures the API Evangelist enrichment layer over openapi/abcuro-content-openapi.yml as
     OpenAPI Overlay 1.0.0 actions, so the derived spec stays separable from our annotations.
     Records provenance, the derived-not-official caveat, the observed consumer-facing behaviours,
