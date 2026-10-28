@@ -64,66 +64,125 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Abcuro is a clinical-stage biotechnology company in Newton, Massachusetts, developing first-in-class
-immunotherapies that precisely modulate highly cytotoxic T cells for autoimmune disease and cancer.
-Its lead candidate, **ulviprubart (ABC008)**, is a KLRG1-targeting monoclonal antibody evaluated in
-the registrational Phase 2/3 MUSCLE study in inclusion body myositis (IBM), and in T cell large
-granular lymphocytic leukemia (T-LGLL) and mature T and NK cell lymphomas.
+Abcuro is a clinical-stage biotechnology company headquartered in Newton, Massachusetts, developing first-in-class immunotherapies that precisely modulate highly cytotoxic T cells for autoimmune disease and cancer. Its lead candidate, ulviprubart (ABC008), is a monoclonal antibody targeting KLRG1 that selectively depletes highly cytotoxic T cells, evaluated in the registrational Phase 2/3 MUSCLE study in inclusion body myositis (IBM) and in T cell large granular lymphocytic leukemia (T-LGLL) and mature T and NK cell lymphomas. Abcuro publishes no commercial developer platform or product API; its only machine-readable surface is the public WordPress REST API behind abcuro.com, which anonymously serves the corporate content graph — press releases, pipeline and science pages, scientific publications, leadership and board people records, investor records, and media assets — and is catalogued here as a read-only content API rather than a product API.
 
-- Website: https://abcuro.com/
-- Secondary-market profile: https://forgeglobal.com/abcuro_stock/
+**Areas:** Biotechnology · Pharmaceuticals · Immunology · Autoimmune Disease · Oncology · Clinical Trials · Life Sciences · Drug Development · Healthcare · content-api · WordPress
 
-## API posture
+## Abcuro on APIs.io
 
-Abcuro publishes **no developer platform**. There is no API key, signup, pricing, SDK, CLI,
-sandbox, changelog, status page, MCP server, agent card or webhook surface, and no `/.well-known/`
-document of any kind.
+Everything profiled for Abcuro is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/abcuro/](https://apis.io/providers/abcuro/)** — or go straight to one of the APIs or properties below.
 
-The one machine-readable surface the company exposes is the **public WordPress REST API** behind
-`abcuro.com`, at `https://abcuro.com/wp-json/`. It answers anonymously and serves the corporate
-content graph, including four Abcuro-specific custom post types. Counts observed 2026-08-02:
+### APIs (1)
 
-| Collection | Records |
+- [Abcuro Website (WordPress REST)](https://apis.io/apis/abcuro/abcuro-com-website-wordpress-rest/) — The public WordPress REST API (wp-json) of the Abcuro website at abcuro.com: the route index of the site's content management system, catalogued as one site…
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [abcuro-content](https://apis.io/servers/abcuro/abcuro-content/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Abcuro Agentic Access](https://apis.io/agentic-access/abcuro/abcuro-agentic-access/)
+
+#### Collections (12)
+
+Postman and Open Collection request collections.
+
+- [Moved to /providers/abcuro/](https://apis.io/collections/abcuro/open-abcuro-careers-api/)
+- [Moved to /providers/abcuro/](https://apis.io/collections/abcuro/open-abcuro-comments-api/)
+- [Moved to /providers/abcuro/](https://apis.io/collections/abcuro/open-abcuro-discovery-api/)
+- [Moved to /providers/abcuro/](https://apis.io/collections/abcuro/open-abcuro-investors-api/)
+- [Moved to /providers/abcuro/](https://apis.io/collections/abcuro/open-abcuro-media-api/)
+- [Moved to /providers/abcuro/](https://apis.io/collections/abcuro/open-abcuro-pages-api/)
+- [Moved to /providers/abcuro/](https://apis.io/collections/abcuro/open-abcuro-people-api/)
+- [Moved to /providers/abcuro/](https://apis.io/collections/abcuro/open-abcuro-press-releases-api/)
+- [Moved to /providers/abcuro/](https://apis.io/collections/abcuro/open-abcuro-publications-api/)
+- [Moved to /providers/abcuro/](https://apis.io/collections/abcuro/open-abcuro-search-api/)
+- [Moved to /providers/abcuro/](https://apis.io/collections/abcuro/open-abcuro-taxonomy-api/)
+- [Moved to /providers/abcuro/](https://apis.io/collections/abcuro/open-abcuro-users-api/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Abcuro Content Overlay](https://apis.io/overlays/abcuro/abcuro-content-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Abcuro Authentication](https://apis.io/security/abcuro/abcuro-authentication/)
+- [Abcuro Domain Security](https://apis.io/security/abcuro/abcuro-domain-security/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://abcuro.com/)
+- [Documentation](https://developer.wordpress.org/rest-api/)
+- [API reference](https://developer.wordpress.org/rest-api/reference/)
+- [Support](https://abcuro.com/contact/)
+- [Blog](https://abcuro.com/news/)
+- [Terms of service](https://abcuro.com/terms-of-use/)
+- [Privacy policy](https://abcuro.com/privacy-policy/)
+
+## API Evangelist rating
+
+**Kin Score 20.2** — emerging · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
 |---|---|
-| `/wp/v2/posts` — press releases | 28 |
-| `/wp/v2/pages` — site pages | 17 |
-| `/wp/v2/media` — assets incl. MUSCLE topline PDFs | 141 |
-| `/wp/v2/abcuro_people` — leadership, team, board | 26 |
-| `/wp/v2/abcuro_investors` | 15 |
-| `/wp/v2/abcuro_pubs` — scientific publications | 13 |
-| `/wp/v2/abcuro_jobs` | 0 |
+| Discoverability | 64.3 |
+| Contract quality | 1.7 |
+| Contract governance | 4.5 |
+| Operational transparency | 0.0 |
+| Developer ergonomics | 37.5 |
+| Access clarity | 21.1 |
 
-This is a **website content API, not a product API** — no SLA, no versioning policy, no deprecation
-notice. It is catalogued here because it is real, public, and the only contract Abcuro exposes.
+**Agent readiness 8.1** — agent-aware
 
-## Artifacts
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | — |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | documented (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | — |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
 
-| Artifact | File | Method |
-|---|---|---|
-| OpenAPI 3.1 — 30 operations, 14 schemas | `openapi/abcuro-content-openapi.yml` | derived |
-| Route index, verbatim | `openapi/_original/abcuro-wp-json-routes.json` | searched |
-| Authentication | `authentication/abcuro-authentication.yml` | derived |
-| Conventions | `conventions/abcuro-conventions.yml` | derived |
-| Error catalog — 8 of 9 codes observed live | `errors/abcuro-problem-types.yml` | probed |
-| Data model — 13 entities, 16 relationships | `data-model/abcuro-data-model.yml` | derived |
-| Lifecycle | `lifecycle/abcuro-lifecycle.yml` | probed |
-| Conformance + security findings | `conformance/abcuro-conformance.yml` | derived |
-| Well-known probes (all 404) | `well-known/abcuro-well-known.yml` | probed |
-| Domain security | `security/abcuro-domain-security.yml` | probed |
-| Agentic access — 30 ops | `agentic-access/abcuro-agentic-access.yml` | generated |
-| MCP candidate — 16 tools | `mcp/abcuro-mcp.yml` | derived |
-| Tool crosswalk | `mcp/abcuro-tool-crosswalk.yml` | derived |
-| Overlay | `overlays/abcuro-content-overlay.yaml` | generated |
-| Agent skills — 3 | `skills/` | generated |
-| llms.txt | `llms/abcuro-llms.txt` | generated |
+**Regulatory alignment 19.5** — Health
 
-The OpenAPI was **derived by API Evangelist** from the live route discovery document; it is not
-published or endorsed by Abcuro.
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/abcuro/](https://apis.io/providers/abcuro/).
 
-## Not present, verified
+## How this profile is made
 
-No A2A agent card (`/.well-known/agent-card.json` and the legacy `/.well-known/agent.json` both
-404 on every host), no AsyncAPI or event surface, no GraphQL, no gRPC, no published MCP server, no
-first-party packages on npm/PyPI/RubyGems/NuGet/crates.io, no GitHub organization, no security.txt,
-no vulnerability disclosure programme, no trust center, no idempotency contract, and no documented
-rate limits.
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Abcuro: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/abcuro/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
